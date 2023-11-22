@@ -1,1 +1,464 @@
 /* Add your CSS here */
+  
+@font-face {
+    font-family: "DIN 2014 Light";
+    src: url("https://db.onlinewebfonts.com/t/40508c5e045b37ccaca5ccfec24d1479.eot");
+    src: url("https://db.onlinewebfonts.com/t/40508c5e045b37ccaca5ccfec24d1479.eot?#iefix")format("embedded-opentype"),
+    url("https://db.onlinewebfonts.com/t/40508c5e045b37ccaca5ccfec24d1479.woff2")format("woff2"),
+    url("https://db.onlinewebfonts.com/t/40508c5e045b37ccaca5ccfec24d1479.woff")format("woff"),
+    url("https://db.onlinewebfonts.com/t/40508c5e045b37ccaca5ccfec24d1479.ttf")format("truetype"),
+    url("https://db.onlinewebfonts.com/t/40508c5e045b37ccaca5ccfec24d1479.svg#DIN 2014 Light")format("svg");
+}
+
+@font-face {
+    font-family: "DIN2014-Regular";
+    src: url("https://db.onlinewebfonts.com/t/e0fa406cbe458b32a7ea4e9a379b85fc.eot");
+    src: url("https://db.onlinewebfonts.com/t/e0fa406cbe458b32a7ea4e9a379b85fc.eot?#iefix")format("embedded-opentype"),
+    url("https://db.onlinewebfonts.com/t/e0fa406cbe458b32a7ea4e9a379b85fc.woff2")format("woff2"),
+    url("https://db.onlinewebfonts.com/t/e0fa406cbe458b32a7ea4e9a379b85fc.woff")format("woff"),
+    url("https://db.onlinewebfonts.com/t/e0fa406cbe458b32a7ea4e9a379b85fc.ttf")format("truetype"),
+    url("https://db.onlinewebfonts.com/t/e0fa406cbe458b32a7ea4e9a379b85fc.svg#DIN2014-Regular")format("svg");
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Geologica:wght@300&display=swap');
+
+.question-no-found{
+    font-family: "DIN 2014 Light";
+    font-size: 24px;
+    width: 30%;
+    text-align: center;
+    margin: 5% auto 0;
+    top: 50%;
+
+}
+.header {
+    position: fixed;
+    width: 100%;
+    border-top: solid 3px #f48225;
+    border-bottom: solid 1px #d8dbdd;
+    padding-top: 5px;
+    display: flex;
+}
+.header-icon {
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+    margin-left: 10%;
+}
+
+/*  styles for header text */
+.header-text {
+    font-family: "DIN 2014 Light";
+    font-size: 24px;
+    padding-top: 10px;
+}
+.header-text:nth-of-type(1) {
+    font-size: 8px;
+    margin-right: -5px;
+}
+.header-text:nth-of-type(3) {
+    font-family: "DIN2014-Regular";
+    font-weight: 600;
+    margin-left: 2px;
+}
+.search-bar {
+    width: 40%;
+    margin-top: 5px;
+    margin-left: 20%;
+    height: 35px;
+}
+/* header text */
+.content-header-text {
+    font-size: 25px;
+    margin-right: 20%;
+    padding-left: 25px;
+    padding-right: 40%;
+    font-family: 'Geologica', sans-serif;
+}
+.right-content {
+    top: 59px;
+    position: fixed;
+    width: 85%;
+    left: 15%;
+    height: 100%;
+}
+
+.left-menu {
+    top: 59px; 
+    position: fixed;
+    width: 15%;
+    height: 100%;
+    border-right: solid 1px #d8dbdd;
+    padding-top: 3%;
+}
+
+.main-nav-bar{
+    align-items: stretch;
+    display: flex;
+    text-align: center;
+    justify-content: space-between;
+    padding-top: 25px;
+    padding-bottom: 25px;
+    
+}
+.question-selection-bar{
+    flex-flow: row nowrap;
+    display: flex;
+    padding-right: 20%;
+    padding-left: 20%;
+    
+ 
+}
+.selected-menu {
+    background-color: #f1f2f3;
+    font-weight: bold;
+    color: black;
+    border-right: solid 3px #f48424;
+}
+.left-menu-header {
+    color: #7b828a;
+    font-size: 12px;
+    font-family: "DIN2014-Regular";
+    margin-left: 50%;
+    padding-bottom: 10px;
+    user-select: none;
+}
+.left-menu-text {
+    margin-left: 50%;
+    padding: 4%;
+    color: #525960;
+    font-size: 13px;
+    font-family: 'Geologica', sans-serif;
+    user-select: none;
+}
+.question-header {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+.question-num{
+    font-size: 1.30769231rem;
+    padding-left: 30px;
+    padding-right: 30%;
+    
+}
+.selectable {
+    cursor: pointer;
+}
+/* Ask Question button  */
+button.ask-question {
+    background-color: #0095ff;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    box-sizing: border-box;
+    color: #fff;
+    cursor: pointer;
+    font-family: "Segoe UI","Liberation Sans",sans-serif;
+    font-size: 13px;
+    padding: 8px .8em;
+    position: relative;
+    text-align: center;
+    text-decoration: none;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  
+button.question-button{
+
+    border: 1px solid transparent;
+    box-sizing: border-box;
+    border-radius: 3px;
+    font-family: "Segoe UI","Liberation Sans",sans-serif;
+    font-size: 13px;
+    padding: 8px;
+    position: relative;
+    text-align: center;
+    text-decoration: none;
+}
+.tag-header {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 80%;
+}
+
+.flush-left{
+    position: fixed;
+    width: 85%;
+    left: 15%;
+    height: 100%;
+    border-top: 3px dotted lightslategray;
+    
+
+
+}
+.user-meta{
+    align-items:flex-end;
+    display: flex;
+    gap: 4px;
+    color:red;
+    font-size: 16px;
+    width: auto;
+    
+
+}
+.post-summary-content-meta-container {
+    width: 40%;
+    border: 1px solid transparent;
+    height: 55px;
+    text-align: left !important;
+}
+.post-summary{
+    border-bottom: 3px dotted lightslategray;
+    padding-top: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 20px;
+    height: 10%;
+    text-align: center; 
+    position: relative;
+   overflow:visible;
+   display: block;
+   
+   
+}
+.post-summary-content-meta-text-container{
+    color:#525960 !important;
+    font-weight: 400;
+    display: block;
+    font-size: 1.30769231rem;
+    word-break: break-word;
+    width: 80% !important;
+    height: 0% !important;
+    margin-top: 0!important;
+    margin-bottom: 0 !important;
+
+
+    
+    /* set the width and height for the text*/
+}
+button.post-summary-content-meta-tags{
+
+    border: 1px solid transparent;
+    text-align:center;
+    color:white;
+    background-color: darkgray;
+    cursor: pointer;
+    box-sizing: border-box;
+    width: auto;
+    height: 50%;
+    
+}
+.post-link{
+    cursor: pointer;
+    text-decoration: none;
+    user-select: auto;
+}
+.post-summary-content-title{
+    font-weight: 400;
+    display: block;
+    font-size: 1.30769231rem;
+    word-break: break-word;
+    width: 50%;
+    height: 30%;
+    margin-top: 20px;
+     margin-bottom: 20px;
+     text-align: left;
+     color:#0095ff
+
+
+
+}
+.post-summary-content{
+    position: inherit;
+    flex-grow: 8;
+    width: 80%;
+    height: 110%;
+    left: 13%;
+    bottom: 130%;
+}
+.post-summary-content-meta{
+    border: 1px solid transparent;
+    height: 50%;
+    float:right;
+    width: 30%;
+    margin-right: 30%;
+}
+.post-summary-content-meta-time{
+    order: 2px solid transparent;
+    white-space: nowrap;
+    font-size: 14px;
+    margin-right: 0 !important;
+    text-align: left !important;
+    display: block;
+
+}
+.time{
+    text-decoration: none;
+}
+.post-summary-stats{
+
+    border: 1px solid transparent;
+    display: flex;
+    flex-shrink: 0;
+    flex-direction: column;
+    margin-bottom: 4px;
+    margin-right: 16px;
+    height: 100%;
+    width: 15%;
+  
+}
+.d-white-space{
+    white-space: nowrap;
+    padding-right: 5px;
+}
+.d-front-weight{
+    font-weight: 500;
+}
+.post-summary-stats-items{
+    font-size: 17px;
+    text-align: right;
+    border: 1px solid transparent;
+    display:inline-flex;
+    justify-content: center;
+   
+}
+.post-summary-content-title{
+    font-weight: 400;
+    display: block;
+    font-size: 1.30769231rem;
+    word-break: break-word;
+    width: 50%;
+    height: 30%;
+    margin-top: 20px;
+     margin-bottom: 20px;
+     text-align: left;
+     color:#0095ff
+
+
+
+}
+
+.overflow-page{
+    overflow-y: auto;
+    line-height: normal;
+    height: 90vh;
+}
+
+.d-flex{
+    display: flex;
+}
+button.question-button:hover,
+button.question-button:focus{
+    cursor: pointer;
+    background-color:lightgrey;
+}
+button.ask-question:hover,
+button.ask-question:focus{
+  background-color: #07c;
+}
+.ans-summary-stats{
+
+    width: 10% !important;
+
+}
+.ans-summary-content{
+    border: 1px solid transparent;
+    bottom: 115% !important;
+    width: 85% !important;
+}
+.ans-summary-content-meta{
+    border: 1px solid transparent;
+    width: 15%;
+    height: 60%;
+    float:right;
+}
+.ans-summary-content-meta-user{
+    width: 100%;
+    height: 20%;;
+}
+.answers-summmary{
+    height: 20% !important;
+
+}
+.inc-w{
+    width: 75% !important;
+    
+}
+.inc-font{
+    font-size: 30px !important;
+}
+.color_B{
+    color:#525960 !important;
+}
+.bold_text{
+    font-weight: bold;
+}
+.push-down{
+    margin-top: 90px !important;
+      
+}
+
+/* styling for tags section (right content) */
+.tags_container {
+    display: flex;
+    margin-top: 5%;
+    flex-wrap: wrap;
+    justify-content: left;
+    width: 80%;
+    margin-left: 10%;
+}
+
+.tags_container_element {
+    flex: 1;
+    padding-top: 5%;
+    padding-bottom: 5%;
+    min-width: calc(33.3333% - 10px);  
+    max-width: calc(33.3333% - 10px);
+    margin: 5px;               
+    box-sizing: border-box;    
+    text-align: center;
+   border: dashed gray 1px;
+}
+
+.tag_name {
+    padding-bottom: 5px;
+}
+
+
+.link-lookalike {
+    color: #0b69df;            
+    text-decoration: underline;
+    cursor: pointer;        
+}
+
+
+.tag-header-text {
+    font-size: 25px;
+    padding-left: 25px;
+    font-family: 'Geologica', sans-serif;
+}
+
+.undo_border{
+    border-top: unset !important;
+}
+.d-color-g{
+    color: green !important;
+}
+.clear-element {
+    vertical-align: top !important;
+  }
+.d-summary-content-text{
+    margin-top: unset !important;
+    margin-bottom: unset !important;
+    height: 100% !important;
+    width: 80% !important;
+}
+.flush-right-t{
+    left: 73% !important;
+}
+.flush-right-b{
+    left: 5% !important;
+    margin-top: 5% !important;
+}
