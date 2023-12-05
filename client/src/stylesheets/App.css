@@ -4,9 +4,6 @@
     font-family: "DIN 2014 Light";
     src: url("https://db.onlinewebfonts.com/t/40508c5e045b37ccaca5ccfec24d1479.eot");
     src: url("https://db.onlinewebfonts.com/t/40508c5e045b37ccaca5ccfec24d1479.eot?#iefix")format("embedded-opentype"),
-    url("https://db.onlinewebfonts.com/t/40508c5e045b37ccaca5ccfec24d1479.woff2")format("woff2"),
-    url("https://db.onlinewebfonts.com/t/40508c5e045b37ccaca5ccfec24d1479.woff")format("woff"),
-    url("https://db.onlinewebfonts.com/t/40508c5e045b37ccaca5ccfec24d1479.ttf")format("truetype"),
     url("https://db.onlinewebfonts.com/t/40508c5e045b37ccaca5ccfec24d1479.svg#DIN 2014 Light")format("svg");
 }
 
@@ -14,9 +11,6 @@
     font-family: "DIN2014-Regular";
     src: url("https://db.onlinewebfonts.com/t/e0fa406cbe458b32a7ea4e9a379b85fc.eot");
     src: url("https://db.onlinewebfonts.com/t/e0fa406cbe458b32a7ea4e9a379b85fc.eot?#iefix")format("embedded-opentype"),
-    url("https://db.onlinewebfonts.com/t/e0fa406cbe458b32a7ea4e9a379b85fc.woff2")format("woff2"),
-    url("https://db.onlinewebfonts.com/t/e0fa406cbe458b32a7ea4e9a379b85fc.woff")format("woff"),
-    url("https://db.onlinewebfonts.com/t/e0fa406cbe458b32a7ea4e9a379b85fc.ttf")format("truetype"),
     url("https://db.onlinewebfonts.com/t/e0fa406cbe458b32a7ea4e9a379b85fc.svg#DIN2014-Regular")format("svg");
 }
 
@@ -86,7 +80,7 @@
 .left-menu {
     top: 59px; 
     position: fixed;
-    width: 15%;
+    width: 14.5%;
     height: 100%;
     border-right: solid 1px #d8dbdd;
     padding-top: 3%;
@@ -137,7 +131,7 @@
 }
 .question-num{
     font-size: 1.30769231rem;
-    padding-left: 30px;
+    padding-left: 3%;
     padding-right: 30%;
     
 }
@@ -212,13 +206,13 @@ button.question-button{
 .post-summary{
     border-bottom: 3px dotted lightslategray;
     padding-top: 20px;
-    padding-left: 20px;
+    padding-left: 20x;
     padding-right: 20px;
     padding-bottom: 20px;
     height: 10%;
     text-align: center; 
     position: relative;
-   overflow:visible;
+    overflow:visible;
    display: block;
    
    

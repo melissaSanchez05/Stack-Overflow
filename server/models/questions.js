@@ -21,7 +21,7 @@ tags:[{
 }],
 answers: [{
     type: Schema.Types.ObjectId,
-    ref : 'Answer',
+    ref : 'Answers',
 }],
 asked_by : {
     type: String,

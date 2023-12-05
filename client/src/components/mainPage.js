@@ -1,31 +1,33 @@
 import React ,{useState}from "react";
-
+import { useNavigate } from 'react-router-dom';
 import { QuestionsContent } from "./questionDisplay";
 import { TagContent } from "./tagsDisplay";
 
 
 
-  export function LeftSideMenu(){
-    const [activeButton, setActiveButton] = useState('Questions');
 
+   export function LeftSideMenu({activeTab, component}){
+    const navigate = useNavigate();
+    const [activeButton, setActiveButton] = useState(activeTab);
+
+    
+     
     const handleButton= (label) =>{
-       // setActiveButton(label);
-       if (label === activeButton) {
-        // Clicking the same button again, temporarily set activeButton to null to force a re-render
-        setActiveButton(null);
-        setTimeout(() => setActiveButton(label), 0);
-    } else {
-        setActiveButton(label);
+       if (label === 'Tags') {
+       
+        navigate('/Tags')
+    } else{
+        navigate('/Questions/Newest')
+        
     }
        
     };
-    const getMenuItemClassName = (buttonName) => {
-      return `left-menu-text selectable ${activeButton === buttonName ? 'selected-menu' : ''}`;
+    const getMenuItemClassName = (tab) => {
+      return `left-menu-text selectable ${tab === activeButton ? 'selected-menu' : ''}`;
   };
-    const components = {
-      Questions: <QuestionsContent/>,
-      Tags: <TagContent activeButton={activeButton} setActiveButton={setActiveButton} />,
-  };
+
+ 
+
 
     return (
         <div className="left-menu">
@@ -33,18 +35,12 @@ import { TagContent } from "./tagsDisplay";
         <div className= {getMenuItemClassName('Questions')}  onClick= {()=> handleButton('Questions')}>Question</div>
         <div className= {getMenuItemClassName('Tags')}  onClick= {()=> handleButton('Tags')}>Tags</div>
         <div className="right-content">
-        {components[activeButton]}
+        {component}
+       
         </div>
         </div>
       );
 }
-
-
-
-
-
-
-
 
 
 

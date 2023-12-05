@@ -1,59 +1,80 @@
-import React ,{useState, useEffect}from "react";
+import React ,{useState, useEffect, useContext}from "react";
 import { AnswerContent } from "./answerDisplay";
-import {qs_sort_By_date, show_relative_time} from "./display"
+import Button from "./button";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
-const answerModel = require('./models/answers')
-const questionModel = require('./models/questions')
-const tagsModel = require('./models/tags')
-const meta_data = answerModel.find();
 
-export function QuestionsContent(){
+const tags_db= React.createContext();
+const questions_db = React.createContext();
+const answers_db  = React.createContext();
+
+export function QuestionsContent({activeTab}){
+   
     const [activeQuestionId, setActiveQuestionId] = useState(null);
     const [buttonClicked, setButtonClicked] = useState(false);
-    const [qs_meta_data, set_meta_data] = useEffect([])
+    const [questions, setQuestions] = useState([])
+    const [tags, setTags] = useState([])
+    const [answers, setAnswers] = useState([])
+
     const handleQuestionClick = (questionId) => {
       setActiveQuestionId(questionId);
-      setButtonClicked(true);
+      //setButtonClicked(true);
       
     };
+    useEffect(() => {
+        axios.get('http://localhost:8000/Questions')
+          .then(res => {
+            setQuestions(res.data.questions);
+            setTags(res.data.tags);
+            setAnswers(res.data.answers);
+            
+          })
+          .catch(error => {
+            console.error('Error fetching data:', error);
+          });
+      }, []); 
 
   return(
+    <answers_db.Provider value={answers}>   
+    <questions_db.Provider value={questions}>
+    <tags_db.Provider value={tags}>
     
-        <div className="question-header">
-          {buttonClicked ? null : <span className="content-header-text">All Questions</span>  }
-          {buttonClicked ? null :<Button label ="Ask Question" className= "ask-question"  />}
-          {buttonClicked ?  <AnswerContent questionId={activeQuestionId} /> : <DefaultDisplay activeQuestionId={activeQuestionId} onQuestionClick={handleQuestionClick}/>}
-          </div>
+    
+         <DefaultDisplay  activeQuestionId={activeQuestionId} onQuestionClick={handleQuestionClick} activeTab={activeTab}/>
+        
+          </tags_db.Provider>
+          </questions_db.Provider>
+          </answers_db.Provider>
   );
 }
-function DefaultDisplay({ activeQuestionId, onQuestionClick }){
-    const [activeButton, setActiveButton] = useState('Newest');
+
+function DefaultDisplay({  activeQuestionId, onQuestionClick, activeTab }){
+    const navigate = useNavigate();
     const [questionNumber, setQuestionNumber] = useState(0);
+  
 
-
+    
     const handleButton = (label) => {
-        //setActiveButton(label);
-        if (label === activeButton) {
-          // Clicking the same button again, temporarily set activeButton to null to force a re-render
-          setActiveButton(null);
-          setTimeout(() => setActiveButton(label), 0);
-      } else {
-          setActiveButton(label);
-      }
-        
+        if(label === 'Active'){
+            navigate('/Questions/Active');
+        }else if(label === 'Unanswered'){
+            navigate('/Questions/Unanswered');
+        }else{
+            navigate('/Questions/Newest');
+        }
       };
     const components = {
-        Newest: <DisplayNewest setQuestionNumber={setQuestionNumber} activeQuestionId={activeQuestionId} onQuestionClick={onQuestionClick} />,
+        Newest: <DisplayNewest  setQuestionNumber={setQuestionNumber} activeQuestionId={activeQuestionId} onQuestionClick={onQuestionClick} />,
         Active: <DisplayActive setQuestionNumber={setQuestionNumber}activeQuestionId={activeQuestionId} onQuestionClick={onQuestionClick}/>,
         Unanswered:<DisplayUnanswered setQuestionNumber={setQuestionNumber} activeQuestionId={activeQuestionId} onQuestionClick={onQuestionClick}/>,
     };
 
-    useEffect(() => {
-        setQuestionNumber(meta_data.data.questions.length);
-      }, [activeButton]);
+
     
     return(
-     <>
+     <>     <div className="question-header">
+             <span className="content-header-text">All Questions</span> 
+           <Button label ="Ask Question" className= "ask-question" />
             <div className="main-nav-bar">
             <div className="question-num">{questionNumber}  Questions</div>
 
@@ -64,121 +85,141 @@ function DefaultDisplay({ activeQuestionId, onQuestionClick }){
               
             </div>
           </div>
-          <div className="flush-left overflow-page">
-          {components[activeButton]}
-            </div>
+          <div className="flush-left overflow-page">{components[activeTab]}</div>
+          </div>
  </>
     );
 }
-function QuestionSummary({question , onQuestionClick}){
-    const [activeButton, setActiveButton] = useState(null);
-    const handleButton = (questionId) => {
-        setActiveButton(questionId);
-        onQuestionClick(questionId);
-      };;
-
-        return(
-            <div id={question.qid} className="post-summary">
-              <QuestionSummaryDisplay question={question.ansIds.length} views={question.views}/>
-              <QuestionMeta date={question.askDate} user={question.askedBy} id={question.qid} title={question.title} tags={question.tagIds} onTitleClick={handleButton}/>
-
-                   </div>
-        );
-}
-function QuestionMeta({date,user,id,title,tags, onTitleClick}){
-  return(
-    <div className="post-summary-content">
-    <div className="post-summary-content-meta">
-      <time className="post-summary-content-meta-time post-summary-content-meta">   asked 
-        <span className="time"> {show_relative_time(date)}</span>
-      </time>
-      <div className="user-meta">{user}</div>
-    </div>
-    <h3 className="post-summary-content-title"> <div  className="post-link" onClick= {()=> onTitleClick(id)} >{title} </div>  </h3>
-      <div className="post-summary-content-meta-container">
-      {tags.map((tag) => (<Button key={tag} className="post-summary-content-meta-tags" label= {get_tag_name(tag)}/>))}
-       
-         </div>
-         </div>
-  );
-}
-function QuestionSummaryDisplay({question, views}){
-  return(
-    <div className="post-summary-stats"> 
-    <div className="post-summary-stats-items">
-      <span className="post-summary-stats-items d-front-weight d-white-space">{question}</span>
-      <span className="post-summary-stats-items ">answers</span>
-    </div>
-    <div className="post-summary-stats-items">
-      <span id ="views" className="post-summary-stats-items d-front-weight d-white-space">{views}</span>
-      <span className="post-summary-stats-items ">views</span>
-    </div>
-</div>
-  );
-}
 function DisplayNewest({ setQuestionNumber,activeQuestionId, onQuestionClick }){
+    const sortedQuestions = useContext(questions_db).sort((q1, q2) => {
+        return sortQuestionsByDate(q1,q2);
+     });
+    useEffect(()=>{
+        setQuestionNumber(sortedQuestions.length);
 
-    const qs_sorted_by_date = meta_data.data.questions.sort(function(q1,q2){
-        return qs_sort_By_date(q1.askDate, q2.askDate);
-          
-  
-    }).reverse();
-
-    setQuestionNumber(qs_sorted_by_date.length);
+    },[ sortedQuestions, setQuestionNumber]);
 
     return(
+      
         <>
-            {qs_sorted_by_date.length > 0 && (qs_sorted_by_date.map((question) => <QuestionSummary key={question.qid} question={question} activeQuestionId={activeQuestionId} onQuestionClick={onQuestionClick}/>))}
-             <div className="question-no-found">No Questions Found</div>
+            {sortedQuestions.length > 0 ? (sortedQuestions.map((question) => <QuestionSummary key={question._id} question={question} activeQuestionId={activeQuestionId} onQuestionClick={onQuestionClick}/>))
+            :( <div className="question-no-found">No Questions Found</div>)}
+            
         </>
 
            );
+        
 }
 function DisplayActive({ setQuestionNumber,activeQuestionId, onQuestionClick }){
-    const qs_active = meta_data.data.questions.filter(function(q1){return q1.ansIds.length > 0}).sort(function(q1,q2){
 
-        const a = most_recent_ansid(q1.ansIds).ansDate;
-        const b = most_recent_ansid(q2.ansIds).ansDate;
+    const qs_active = useContext(questions_db).filter((qs)=>{ return qs.answers.length > 0})
+     .sort(function(q1,q2){
 
-        return qs_sort_By_date(a,b);
-      
+        const a = Most_recent_ansid(q1.answers);//most recent ans from qs
+        const b = Most_recent_ansid(q2.answers);
+        
+        if(sortAnswerByDate(a,b) === a){
+            
+            return q1;
+        }else{
+            return q2;
+        }
+    
       });
-      setQuestionNumber(qs_active.length);
+    
+      useEffect(()=>{
+        setQuestionNumber(qs_active.length);
 
-    return(<>
-    { qs_active.length > 0 &&  (qs_active.map((question) =><QuestionSummary key={question.ansIds} question={question} activeQuestionId={activeQuestionId} onQuestionClick={onQuestionClick}/>))}
-    <div className="question-no-found">No Questions Found</div>
-    </>);
+    },[qs_active, setQuestionNumber]);
+     
+
+    return(
+    <>
+    { qs_active.length > 0 ? 
+     (qs_active.map((question) =><QuestionSummary key={question._id} question={question} activeQuestionId={activeQuestionId} onQuestionClick={onQuestionClick}/>)) 
+     : (<div className="question-no-found">No Questions Found</div>) }
+    
+    </>
+    );
 
 }
 function DisplayUnanswered({ setQuestionNumber ,activeQuestionId, onQuestionClick }){
-    const qs_filtered_by_noAnswer = meta_data.data.questions.filter(function(qs){ return qs.ansIds.length === 0;});
-    setQuestionNumber(qs_filtered_by_noAnswer.length);
+    console.log('active function: unanswered');
+    const noAnswerQuestions = useContext(questions_db).filter((qs) => { return qs.answers.length === 0});
+    useEffect(()=>{
+        setQuestionNumber(noAnswerQuestions.length);
+    },[noAnswerQuestions, setQuestionNumber]);
+    
     return(
     <>
-        {qs_filtered_by_noAnswer.length > 0 && (qs_filtered_by_noAnswer.map((quesiton) => <QuestionSummary key={quesiton.ansIds} question={quesiton} activeQuestionId={activeQuestionId} onQuestionClick={onQuestionClick}/>)) }
-        <div className="question-no-found">No Questions Found</div>
+        {(noAnswerQuestions.length > 0) ? 
+        (noAnswerQuestions.map((quesiton) => <QuestionSummary key={quesiton._id} question={quesiton} activeQuestionId={activeQuestionId} onQuestionClick={onQuestionClick}/>))
+        :(<div className="question-no-found">No Questions Found</div>)}
+    
     </>);
 
 }
-function get_tag_name(id){
-    const meta_data = new Model();
-    const tags = meta_data.data.tags;
-    for(const t of tags){
-       if(t.tid === id){
+function Get_tag_name(id){
+
+    var tag = useContext(tags_db);
+    for(const t of tag){
+       if(t._id === id){
         return t.name;
        }
     }
     return 'tag not found'
   
 }
-function most_recent_ansid(ansArr){
+function Most_recent_ansid(ansArr){
 
-    const ans_in_ansArr = meta_data.data.answers.filter(function(ans){return ansArr.includes(ans.aid);});
-    const sortans_in_ansArr = ans_in_ansArr.reduce(function(ans1, ans2){
+    var mostRecentAns = useContext(answers_db)
+    .filter(function(ans){return ansArr.includes(ans._id);})
+    .reduce((ans1, ans2) => { return sortAnswerByDate(ans1, ans2) });
   
-      const a = ans1.ansDate;
-      const b = ans2.ansDate;
+    return mostRecentAns;
+  
+  
+  
+  
+}
+function showRelativeTime(date){
+    const postDate = new Date(date);
+    const currentTime = new Date();
+
+
+    const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    var m = postDate.getMinutes();
+          if(postDate.getMinutes() < 10){
+            m = "0" + postDate.getMinutes();
+          }
+  
+    if(currentTime.getFullYear() !== postDate.getFullYear()){//post year is older 
+          
+      return months[postDate.getMonth()] + " " + postDate.getDate() + ", " + postDate.getFullYear() + " at " + postDate.getHours() + ":" + m;
+  
+    }
+    else if(currentTime.getMonth() !== postDate.getMonth()){//current year, but different month
+      return months[postDate.getMonth()] + " " + postDate.getDate() + " at " + postDate.getHours() + ":" + m;
+    }else if(currentTime.getDate() !== postDate.getDate()){//same year and month, but different date(1-31)
+      return  Math.abs( currentTime.getDate() - postDate.getDate()) + " days ago" ;
+    }else if(currentTime.getHours() !== postDate.getHours()){//same year,month,date
+      return Math.abs(currentTime.getHours() - postDate.getHours()) + " hours ago";
+    }else if(currentTime.getMinutes() !== postDate.getMinutes()){
+      return Math.abs(currentTime.getMinutes() - postDate.getMinutes()) + " minutes ago";
+    }else{
+      return Math.abs(currentTime.getSeconds() - postDate.getSeconds()) + " seconds ago";
+    }
+  
+  
+
+    
+    
+  
+}
+function sortAnswerByDate(ans1, ans2){
+
+    const a = new Date(ans1.ans_date_time);
+    const b = new Date(ans2.ans_date_time);
   
   
       if(a.getFullYear() !== b.getFullYear()){
@@ -207,12 +248,80 @@ function most_recent_ansid(ansArr){
         return ans1;
       }return ans2;
   
-  
-    });
-  
-    return sortans_in_ansArr;
-  
-  
-  
-  
+
+}
+function sortQuestionsByDate(q1,q2){
+    var a = new Date(q1.asked_date_time);
+    var b = new Date(q2.asked_date_time);
+    if(a.getFullYear() !== b.getFullYear()){
+      if(a.getFullYear() > b.getFullYear()){
+        return q1;
+      }
+      return q2;
+    }else if(a.getMonth() !== b.getMonth()){
+      if(a.getMonth() > b.getMonth()){
+        return q1;
+      }return q2;
+    }else if(a.getDate() !== b.getDate()){
+      if(a.getDate() > b.getDate()){
+        return q1;
+      }return q2;
+      
+    }else if(a.getHours() !== b.getHours()){
+      if(a.getHours() > b.getHours()){
+        return q1;
+      }return q2;
+    }else if(a.getMinutes() !== b.getHours()){
+      if(a.getMinutes() > b.getHours()){
+        return q1;
+      }return q2;
+    }if(a.getSeconds() > b.getSeconds()){
+      return q1;
+    }return q2;
+}
+function QuestionSummary({question , onQuestionClick}){
+    const [activeButton, setActiveButton] = useState(null);
+    const handleButton = (questionId) => {
+        setActiveButton(questionId);
+        onQuestionClick(questionId);
+      };;
+
+        return(
+            <div className="post-summary">
+              <QuestionSummaryDisplay ans={question.answers.length} views={question.views}/>
+              <QuestionMeta date={question.asked_date_time} user={question.asked_by} id={question._id} title={question.title} tags={question.tags} onTitleClick={handleButton}/>
+
+                   </div>
+        );
+}
+function QuestionMeta({date,user,id,title,tags, onTitleClick}){
+  return(
+    <div className="post-summary-content">
+    <div className="post-summary-content-meta">
+      <time className="post-summary-content-meta-time post-summary-content-meta">   asked 
+        <span className="time"> {showRelativeTime(date)}</span>
+      </time>
+      <div className="user-meta">{user}</div>
+    </div>
+    <h3 className="post-summary-content-title"> <div  className="post-link" onClick= {()=> onTitleClick(id)} >{title} </div>  </h3>
+      <div className="post-summary-content-meta-container">
+      {tags.map((tag) => (<Button key={tag} className="post-summary-content-meta-tags" label= {Get_tag_name(tag)}/>))}
+       
+         </div>
+         </div>
+  );
+}
+function QuestionSummaryDisplay({ans, views}){
+  return(
+    <div className="post-summary-stats"> 
+    <div className="post-summary-stats-items">
+      <span className="post-summary-stats-items d-front-weight d-white-space">{ans}</span>
+      <span className="post-summary-stats-items ">answers</span>
+    </div>
+    <div className="post-summary-stats-items">
+      <span id ="views" className="post-summary-stats-items d-front-weight d-white-space">{views}</span>
+      <span className="post-summary-stats-items ">views</span>
+    </div>
+</div>
+  );
 }
