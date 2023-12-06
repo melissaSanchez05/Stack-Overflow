@@ -50,7 +50,7 @@ export function TagContent() {
       <div className="tag-header">
         <span className="tag-header-text">{uniqueTags.length} tags </span>
         <span className="tag-header-text">All Tags</span>
-        <Button label="Ask Question" className="ask-question"/>
+        <Button label="Ask Question" className="ask-question" to={'/AnswerQuestion'}/>
       </div>
       <div className="tags_container"> 
       {uniqueTags.length > 0 ? (uniqueTags.map((tag) => <DisplayTags key={tag._id} tag={tag} setActiveTag={setActiveTag} />)) 
@@ -108,66 +108,8 @@ function TagIdMatch( tagId, tag_name){
    return false;
 
 }
-function DisplayRelatedQuestions({question}){
-    return(
-        <div id={question._id} className="post-summary">
-      
-        <div className="post-summary-stats"> 
-            <div className="post-summary-stats-items">
-              <span className="post-summary-stats-items d-front-weight d-white-space">{question.answers.length}</span>
-              <span className="post-summary-stats-items ">answers</span>
-            </div>
-            <div className="post-summary-stats-items">
-              <span id ="views" className="post-summary-stats-items d-front-weight d-white-space">{question.views}</span>
-              <span className="post-summary-stats-items ">views</span>
-            </div>
-        </div>
-        <div className="post-summary-content">
-          <div className="post-summary-content-meta">
-            <time className="post-summary-content-meta-time post-summary-content-meta">   asked 
-              <span className="time"> {showRelativeTime(question.asked_date_time)}</span>
-            </time>
-            <div className="user-meta">{question.asked_by}</div>
-          </div>
-          <h3 className="post-summary-content-title"> <div  className="post-link" >{question.title} </div>  </h3>
-            <div className="post-summary-content-meta-container">
-            {question.tags.map((tag) => (<Button key={tag} className="post-summary-content-meta-tags" label= {Get_tag_name(tag)}/>))}
-             
-               </div>
-               </div>
-               </div>
-    );
 
-}
-function sortQuestionsByDate(q1,q2){
-    var a = new Date(q1.asked_date_time);
-    var b = new Date(q2.asked_date_time);
-    if(a.getFullYear() !== b.getFullYear()){
-      if(a.getFullYear() > b.getFullYear()){
-        return q1;
-      }
-      return q2;
-    }else if(a.getMonth() !== b.getMonth()){
-      if(a.getMonth() > b.getMonth()){
-        return q1;
-      }return q2;
-    }else if(a.getDate() !== b.getDate()){
-      if(a.getDate() > b.getDate()){
-        return q1;
-      }return q2;
-      
-    }else if(a.getHours() !== b.getHours()){
-      if(a.getHours() > b.getHours()){
-        return q1;
-      }return q2;
-    }else if(a.getMinutes() !== b.getHours()){
-      if(a.getMinutes() > b.getHours()){
-        return q1;
-      }return q2;
-    }if(a.getSeconds() > b.getSeconds()){
-      return q1;
-    }return q2;
-}
+
 
     
     

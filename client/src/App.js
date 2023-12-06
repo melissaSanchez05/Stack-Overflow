@@ -8,7 +8,7 @@ import { BrowserRouter, Routes, Route, useParams } from 'react-router-dom';
 import { QuestionsContent } from './components/questionDisplay';
 import { TagContent } from './components/tagsDisplay';
 import { TagRelatedQuestions } from './components/tagSelectedDisplay';
-
+import { AnswerContent } from './components/answerDisplay';
 function HomePage(){
   return(
       <>
@@ -48,7 +48,24 @@ function TagSelected(){
   </>
   );
 }
-
+function QuestionSelected(){
+  const {activeTab, questionId} = useParams();
+  
+  return(
+    
+    <>
+    <Header />
+    <LeftSideMenu activeTab={activeTab} component={<AnswerContent questionId={questionId}/>}>
+  </LeftSideMenu>
+    </>
+  );
+}
+function AnswerQuestion(){
+  return(
+    <>
+    </>
+  );
+}
 function App() {
   return (
 
@@ -58,8 +75,10 @@ function App() {
         <Route path = '/Questions/Newest' element={<QuestionHome activeTab={'Newest'} />}/>
         <Route path = '/Questions/Active' element={<QuestionHome activeTab={'Active'}/>}/>
         <Route path = '/Questions/Unanswered' element={<QuestionHome activeTab={'Unanswered'}/>}/>
+        <Route path = '/Questions/:activeTab/:questionId' element={<QuestionSelected/>}/>
         <Route path = '/Tags' element={<TagHome />}  />
         <Route path = '/Tags/:activeTag' element={<TagSelected/>}  />
+        <Route path = '/AnswerQuestion' element={<AnswerQuestion/>}  />
     </Routes>
 </BrowserRouter>
   

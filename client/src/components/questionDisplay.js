@@ -1,5 +1,4 @@
 import React ,{useState, useEffect, useContext}from "react";
-import { AnswerContent } from "./answerDisplay";
 import Button from "./button";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -11,14 +10,17 @@ const answers_db  = React.createContext();
 export function QuestionsContent({activeTab}){
    
     const [activeQuestionId, setActiveQuestionId] = useState(null);
-    const [buttonClicked, setButtonClicked] = useState(false);
     const [questions, setQuestions] = useState([])
     const [tags, setTags] = useState([])
     const [answers, setAnswers] = useState([])
+    const navigate = useNavigate();
 
     const handleQuestionClick = (questionId) => {
-      setActiveQuestionId(questionId);
+      //setActiveQuestionId(questionId);
       //setButtonClicked(true);
+      if(questionId !== null){
+        navigate(`/Questions/Questions/${questionId}`);
+      }
       
     };
     useEffect(() => {
@@ -74,14 +76,14 @@ function DefaultDisplay({  activeQuestionId, onQuestionClick, activeTab }){
     return(
      <>     <div className="question-header">
              <span className="content-header-text">All Questions</span> 
-           <Button label ="Ask Question" className= "ask-question" />
+           <Button label ="Ask Question" className= "ask-question" to={'/AnswerQuestion'} />
             <div className="main-nav-bar">
             <div className="question-num">{questionNumber}  Questions</div>
 
             <div className="question-selection-bar">
-              <Button label = "Newest" className="question-button d-flex" onClick= {()=> handleButton('Newest')} />
-              <Button label = "Active" className="question-button d-flex" onClick= {()=> handleButton('Active')}/>
-              <Button label = "Unanswered" className="question-button d-flex" onClick= {()=> handleButton('Unanswered')}/>
+              <Button label = "Newest" className="question-button d-flex" to ={'/Questions/Newest'} />
+              <Button label = "Active" className="question-button d-flex" to ={'/Questions/Active'}/>
+              <Button label = "Unanswered" className="question-button d-flex" to ={'/Questions/Unanswered'}/>
               
             </div>
           </div>
@@ -305,7 +307,7 @@ function QuestionMeta({date,user,id,title,tags, onTitleClick}){
     </div>
     <h3 className="post-summary-content-title"> <div  className="post-link" onClick= {()=> onTitleClick(id)} >{title} </div>  </h3>
       <div className="post-summary-content-meta-container">
-      {tags.map((tag) => (<Button key={tag} className="post-summary-content-meta-tags" label= {Get_tag_name(tag)}/>))}
+      {tags.map((tag) => (<Button key={tag} className="post-summary-content-meta-tags" label= {Get_tag_name(tag)} to={`/Tags/${tag}`}/>))}
        
          </div>
          </div>

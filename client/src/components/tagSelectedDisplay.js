@@ -1,18 +1,24 @@
 import axios from "axios";
 import React, { useState, useEffect , useContext} from "react";
+import { useNavigate } from 'react-router-dom';
 import Button from "./button";
 
 const tags_db = React.createContext();
 const questions_db = React.createContext();
 
 export function TagRelatedQuestions({tag_name}){
-    console.log('tag name ', tag_name);
+   const navigate = useNavigate();
     const [questions, setQuestions] = useState([]);
     const [tags, setTags] = useState({});
     const [activeQuestionId, setActiveQuestionId] = useState(null);
 
     const onQuestionClick = (questionId) => {
-        setActiveQuestionId(questionId);}
+  
+        if(questionId !== null){
+          navigate(`/Questions/Tags/${questionId}`);
+        }
+        
+      };
 
     useEffect(() => {
         axios.get('http://localhost:8000/Tags/selected')
@@ -29,6 +35,8 @@ export function TagRelatedQuestions({tag_name}){
             console.error('Error fetching data:', error);
           });
       }, []); 
+
+ 
 const relatedQs =  RelatedQuestions(questions, tags,tag_name);
 
     return(
@@ -88,12 +96,12 @@ function QuestionSummary({question , onQuestionClick}){
         return(
             <div className="post-summary">
               <QuestionSummaryDisplay ans={question.answers.length} views={question.views}/>
-              <QuestionMeta date={question.asked_date_time} user={question.asked_by} id={question._id} title={question.title} tags={question.tags} onTitleClick={handleButton}/>
+              <QuestionMeta date={question.asked_date_time} user={question.asked_by} id={question._id} title={question.title} tags={question.tags} onQuestionClick={handleButton}/>
 
                    </div>
         );
 }
-function QuestionMeta({date,user,id,title,tags, onTitleClick}){
+function QuestionMeta({date,user,id,title,tags, onQuestionClick}){
     return(
       <div className="post-summary-content">
       <div className="post-summary-content-meta">
@@ -102,9 +110,9 @@ function QuestionMeta({date,user,id,title,tags, onTitleClick}){
         </time>
         <div className="user-meta">{user}</div>
       </div>
-      <h3 className="post-summary-content-title"> <div  className="post-link" onClick= {()=> onTitleClick(id)} >{title} </div>  </h3>
+      <h3 className="post-summary-content-title"> <div  className="post-link" onClick= {()=> onQuestionClick(id)} >{title} </div>  </h3>
         <div className="post-summary-content-meta-container">
-        {tags.map((tag) => (<Button key={tag} className="post-summary-content-meta-tags" label= {Get_tag_name(tag)}/>))}
+        {tags.map((tag) => (<Button key={tag} className="post-summary-content-meta-tags" label= {Get_tag_name(tag)} to={`/Tags/${tag}`}/>))}
          
            </div>
            </div>
@@ -124,7 +132,6 @@ function QuestionSummaryDisplay({ans, views}){
   </div>
     );
   }
-
 function showRelativeTime(date){
     const postDate = new Date(date);
     const currentTime = new Date();
