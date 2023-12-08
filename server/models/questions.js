@@ -22,6 +22,7 @@ tags:[{
 answers: [{
     type: Schema.Types.ObjectId,
     ref : 'Answers',
+    default : [],
 }],
 asked_by : {
     type: String,
@@ -33,6 +34,10 @@ asked_date_time : {
 },
 views : {
     type : Number,
+    default : 0,
+},
+__v : {
+    type: Number,
     default : 0,
 },
 });

@@ -22,10 +22,13 @@ export function AnswerContent({questionId}){
         console.error('Error fetching data:', error);
       });
   }, []); 
-        
+       
+
+
   if (questions.length === 0 || answers.length === 0) {
     return <div>Loading...</div>;
   }
+
       return(
 
            <>
@@ -45,35 +48,39 @@ function QuestionSummary({questionId, questions, answers}){
     const current_answersId = current_qs.flatMap(qs => qs.answers)
     
    
-    /*
-    update the data base
-       const updatedViews = current_qs.views + 1;//updates the views
-       //responses related to the qs which are sorted by the date posted
-       axios.put(`http://localhost:8000/Answers/${questionId}`, {
-  views: updatedViews,
-})
-  .then(response => {
-    console.log('Question updated successfully:', response.data);
-    // Now you can update the state or perform any additional actions
-  })
-  .catch(error => {
-    console.error('Error updating question:', error);
-  });
-  */
-       
-   //console.log('ans: ',current_answersId);
+    
        const current_related_ans =  answers.filter((ans)=>{return  current_answersId.includes(ans._id); })
-      .sort(function(ans1,ans2){ return sortAnswerByDate(ans1, ans2);});
-    console.log(current_related_ans);
+      .sort(function(ans1,ans2){ return sortAnswerByDate(ans1, ans2);}).reverse();
+
+            //update the data base
+            
+    const submitUpdate = async () => {
+      try {
+        const updatedViews = Number(current_qs.flatMap(qs => qs.views)) + 1;//updates the views
+        const view =  {
+         views: updatedViews,
+          
+        };
+    
+        const req = await axios.post(`http://localhost:8000/Questions/${questionId}`,view);
+        console.log('response: ', req.data);
+       
+      
+      } catch (error) {
+        console.error('Error adding answer:', error);
+      }
+    };
+     
+    submitUpdate();
      
       
     return(
         <>
-     
+     <Button label ="Ask Question" className= "ask-question flush-right-button" to={`/AskQuestion`}/>
       {current_qs.length > 0 ? ( current_qs.map((qs)=> <QuesitonDisplay key={qs._id} question={qs}/>)) : (<div className="question-no-found">No Questions Found</div>)}
       {current_related_ans.length > 0 ? (current_related_ans.map((answer)=> <RelatedAnswers key={answer._id} answer={answer}/>))
       :(<div className="question-no-found">No Questions Found</div>)  }
-      <Button label ="Answer Question" className= "ask-question flush-right-b" to={'/AnswerQuestion'}/>
+      <Button label ="Answer Question" className= "ask-question flush-right-b" to={`/AnswerQuestion/${questionId}`}/>
       </>
     );
     
@@ -101,7 +108,7 @@ function QuestionSummaryDisplay({title, summary}){
       return(
         <div className="post-summary-content ans-summary-content ">
             
-        <h3 className="post-summary-content-title inc-w post-link color_B inc-font bold_text">{title}</h3>
+        <h3 className="post-summary-content-title inc-w color_B inc-font bold_text">{title}</h3>
         <h3 className="post-summary-content-meta-text-container post-summary-content-title">{summary}</h3>
         
 

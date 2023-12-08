@@ -17,7 +17,11 @@ const Schema = mongoose.Schema;
     ans_date_time : {
         type : Date,
         default : Date.now,
-    }
+    },
+    __v :{
+        type: Number,
+        default : 0,
+    },
  });
 
  AnswerSchema.virtual('url').get(function(){

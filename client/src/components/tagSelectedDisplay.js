@@ -12,13 +12,7 @@ export function TagRelatedQuestions({tag_name}){
     const [tags, setTags] = useState({});
     const [activeQuestionId, setActiveQuestionId] = useState(null);
 
-    const onQuestionClick = (questionId) => {
-  
-        if(questionId !== null){
-          navigate(`/Questions/Tags/${questionId}`);
-        }
-        
-      };
+
 
     useEffect(() => {
         axios.get('http://localhost:8000/Tags/selected')
@@ -35,7 +29,17 @@ export function TagRelatedQuestions({tag_name}){
             console.error('Error fetching data:', error);
           });
       }, []); 
-
+      
+      const onQuestionClick = (questionId) => {
+  
+        if(questionId !== null){
+          navigate(`/Questions/Tags/${questionId}`);
+        }
+        
+      };
+      if (questions.length === 0 || tags.length === 0) {
+        return <div>Loading...</div>;
+      }
  
 const relatedQs =  RelatedQuestions(questions, tags,tag_name);
 
@@ -112,7 +116,7 @@ function QuestionMeta({date,user,id,title,tags, onQuestionClick}){
       </div>
       <h3 className="post-summary-content-title"> <div  className="post-link" onClick= {()=> onQuestionClick(id)} >{title} </div>  </h3>
         <div className="post-summary-content-meta-container">
-        {tags.map((tag) => (<Button key={tag} className="post-summary-content-meta-tags" label= {Get_tag_name(tag)} to={`/Tags/${tag}`}/>))}
+        {tags.map((tag) => (<Button key={tag} className="post-summary-content-meta-tags" label= {Get_tag_name(tag)} to={`/Tags/${Get_tag_name(tag)}`}/>))}
          
            </div>
            </div>

@@ -1,0 +1,76 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap');
+
+.p-center{
+    padding-right: 15px;
+    padding-left: 20% !important;
+    padding-top: 15% !important;
+    margin-right: auto; 
+    margin-left: auto;
+}
+
+
+/*
+body {
+    height: 100%
+}
+
+body {
+    display: grid;
+    place-items: center;
+    background: rgb(241, 238, 236);
+}
+*/
+.card {
+	color:#fff;
+    width: 350px;
+    border-radius: 10px;
+   background: linear-gradient(145deg, #dc8850,  #dc8850);
+box-shadow:  20px 20px 60px #d7a764, 
+             -20px -20px 60px #d7a764;
+    border: none
+}
+
+.neo-button {
+    width: 40px;
+    height: 40px;
+    outline: 0 !important;
+    cursor: pointer;
+    color: #fff;
+    font-size: 15px;
+    border: none;
+    margin-right: 10px;
+    border-radius: 50%;
+background: linear-gradient(145deg, #dc8850,  #dc8850);
+box-shadow: inset 20px 20px 60px #d7a764, 
+             inset -20px -20px 60px #d7a764;
+}
+
+.num{
+	
+	color:#eee !important;
+}
+
+.line{
+	color:#fff;
+}
+
+.neo-button:active {
+   border-radius: 50%;
+background: XC;
+box-shadow:  28px 28px 57px #d7a764, 
+             -28px -28px 57px #d7a764;
+}
+.round-img{
+    border-radius: 50%;
+}
+
+.profile_button{
+	color: black;
+	padding:10px; 
+   border:none;
+   outline:0 !important;
+border-radius: 50px;
+background: hsl(0, 0%, 98%);
+
+	
+}

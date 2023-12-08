@@ -6,7 +6,7 @@ export default function Header() {
 
   return (
     <div className="header">
-      <img className="header-icon" src="../../public/logo192.png" alt="img not found" />
+      <img className="header-icon" src="https://i.postimg.cc/1zqXvTLK/download.png" alt="img not found" />
       <span className="header-text">fake</span>
       <span className="header-text">stack</span>
       <span className="header-text">overflow</span>

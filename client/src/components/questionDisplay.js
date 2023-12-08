@@ -35,6 +35,9 @@ export function QuestionsContent({activeTab}){
             console.error('Error fetching data:', error);
           });
       }, []); 
+      if (questions.length === 0 || answers.length === 0 || tags.length === 0) {
+        return <div>Loading...</div>;
+      }
 
   return(
     <answers_db.Provider value={answers}>   
@@ -51,20 +54,12 @@ export function QuestionsContent({activeTab}){
 }
 
 function DefaultDisplay({  activeQuestionId, onQuestionClick, activeTab }){
-    const navigate = useNavigate();
+    
     const [questionNumber, setQuestionNumber] = useState(0);
   
 
     
-    const handleButton = (label) => {
-        if(label === 'Active'){
-            navigate('/Questions/Active');
-        }else if(label === 'Unanswered'){
-            navigate('/Questions/Unanswered');
-        }else{
-            navigate('/Questions/Newest');
-        }
-      };
+
     const components = {
         Newest: <DisplayNewest  setQuestionNumber={setQuestionNumber} activeQuestionId={activeQuestionId} onQuestionClick={onQuestionClick} />,
         Active: <DisplayActive setQuestionNumber={setQuestionNumber}activeQuestionId={activeQuestionId} onQuestionClick={onQuestionClick}/>,
@@ -76,7 +71,7 @@ function DefaultDisplay({  activeQuestionId, onQuestionClick, activeTab }){
     return(
      <>     <div className="question-header">
              <span className="content-header-text">All Questions</span> 
-           <Button label ="Ask Question" className= "ask-question" to={'/AnswerQuestion'} />
+           <Button label ="Ask Question" className= "ask-question" to={'/AskQuestion'} />
             <div className="main-nav-bar">
             <div className="question-num">{questionNumber}  Questions</div>
 
@@ -95,7 +90,7 @@ function DefaultDisplay({  activeQuestionId, onQuestionClick, activeTab }){
 function DisplayNewest({ setQuestionNumber,activeQuestionId, onQuestionClick }){
     const sortedQuestions = useContext(questions_db).sort((q1, q2) => {
         return sortQuestionsByDate(q1,q2);
-     });
+     }).reverse();
     useEffect(()=>{
         setQuestionNumber(sortedQuestions.length);
 
@@ -127,7 +122,7 @@ function DisplayActive({ setQuestionNumber,activeQuestionId, onQuestionClick }){
             return q2;
         }
     
-      });
+      }).reverse();
     
       useEffect(()=>{
         setQuestionNumber(qs_active.length);
@@ -147,7 +142,7 @@ function DisplayActive({ setQuestionNumber,activeQuestionId, onQuestionClick }){
 }
 function DisplayUnanswered({ setQuestionNumber ,activeQuestionId, onQuestionClick }){
     console.log('active function: unanswered');
-    const noAnswerQuestions = useContext(questions_db).filter((qs) => { return qs.answers.length === 0});
+    const noAnswerQuestions = useContext(questions_db).filter((qs) => { return qs.answers.length === 0}).reverse();
     useEffect(()=>{
         setQuestionNumber(noAnswerQuestions.length);
     },[noAnswerQuestions, setQuestionNumber]);
@@ -307,7 +302,7 @@ function QuestionMeta({date,user,id,title,tags, onTitleClick}){
     </div>
     <h3 className="post-summary-content-title"> <div  className="post-link" onClick= {()=> onTitleClick(id)} >{title} </div>  </h3>
       <div className="post-summary-content-meta-container">
-      {tags.map((tag) => (<Button key={tag} className="post-summary-content-meta-tags" label= {Get_tag_name(tag)} to={`/Tags/${tag}`}/>))}
+      {tags.map((tag) => (<Button key={tag} className="post-summary-content-meta-tags" label= {Get_tag_name(tag)} to={`/Tags/${Get_tag_name(tag)}`}/>))}
        
          </div>
          </div>

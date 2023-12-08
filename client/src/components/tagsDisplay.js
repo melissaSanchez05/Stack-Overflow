@@ -8,7 +8,9 @@ const questions_db = React.createContext();
 export function TagContent() {
   const [questions, setQuestions] = useState([]);
   const [tags, setTags] = useState([]);
+  const [activeTag, setActiveTag] = useState(null);
   const navigate = useNavigate();
+
   useEffect(() => {
     axios.get('http://localhost:8000/Tags')
       .then(res => {
@@ -23,21 +25,24 @@ export function TagContent() {
       });
   }, []); 
 
-
-  const uniqueTags = Array.from(new Set(tags.map(tag => tag.name.toLowerCase())))
-                     .map(lowerCaseName => tags.find(tag => tag.name.toLowerCase() === lowerCaseName));
-
-
-
- const [activeTag, setActiveTag] = useState(null);
-
- 
-
+  
  useEffect(() => {
   if (activeTag !== null) {
     navigate(`/Tags/${activeTag}`);
   }
 }, [activeTag]);
+  if (questions.length === 0 || tags.length === 0) {
+    return <div>Loading...</div>;
+  }
+  const uniqueTags = Array.from(new Set(tags.map(tag => tag.name.toLowerCase())))
+                     .map(lowerCaseName => tags.find(tag => tag.name.toLowerCase() === lowerCaseName));
+
+
+
+ 
+
+ 
+
 
 
 
@@ -50,7 +55,7 @@ export function TagContent() {
       <div className="tag-header">
         <span className="tag-header-text">{uniqueTags.length} tags </span>
         <span className="tag-header-text">All Tags</span>
-        <Button label="Ask Question" className="ask-question" to={'/AnswerQuestion'}/>
+        <Button label="Ask Question" className="ask-question" to={'/AskQuestion'}/>
       </div>
       <div className="tags_container"> 
       {uniqueTags.length > 0 ? (uniqueTags.map((tag) => <DisplayTags key={tag._id} tag={tag} setActiveTag={setActiveTag} />)) 

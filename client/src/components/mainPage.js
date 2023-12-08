@@ -1,7 +1,6 @@
 import React ,{useState}from "react";
 import { useNavigate } from 'react-router-dom';
-import { QuestionsContent } from "./questionDisplay";
-import { TagContent } from "./tagsDisplay";
+
 
 
 
