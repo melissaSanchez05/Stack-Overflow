@@ -2,30 +2,32 @@ import Button from "./button";
 import axios from "axios";
 import React ,{useState, useEffect}from "react";
 import { useNavigate } from "react-router-dom";
-
-
-
+const userType = sessionStorage.getItem('userType');
+const username = sessionStorage.getItem('username');
 
 export function AnswerQuestionForm({questionId}) {
-    const [username, setAnswerUsername] = useState('');
+   
     const [answerText, setAnswerText] = useState('');
     const [questions, setQuestions] = useState([]);
     const [answers, setAnswers] = useState([]);
     const navigate = useNavigate()
 
     useEffect(() => {
-        axios.get('http://localhost:8000/AnswerQuestion')
-          .then(res => {
-            
-            setQuestions(res.data.questions);
-            setAnswers(res.data.answers);
-            
-           
-          })
-          .catch(error => {
-            console.error('Error fetching data:', error);
-          });
-      }, []); 
+
+      const fetchData = async () => {
+        try {
+         
+          const res = await axios.get('http://localhost:8000/AnswerQuestion');
+          setQuestions(res.data.questions);
+          setAnswers(res.data.answers);
+    
+        } catch (error) {
+          console.error('Error fetching data:', error);
+        }
+      };
+      fetchData();
+    }, []);
+
       if (questions.length === 0 || answers.length === 0) {
         return <div>Loading...</div>;
       }
@@ -64,17 +66,7 @@ export function AnswerQuestionForm({questionId}) {
     return (
 
       <div className="form-container">
-        <div className="input-div">
-          <span className="input-descriptor">Username*</span>
-          <span className="input-field-descript">Limit username to 100 characters or less</span>
-          <input
-            className="input-question-title"
-            type="text"
-            value={username}
-            onChange={(e) => setAnswerUsername(e.target.value)}
-          />
-          <span className="error" id="question-title-error"></span>
-        </div>
+ 
   
         <div className="input-div">
           <span className="input-descriptor">Answer Text</span>
@@ -90,23 +82,10 @@ export function AnswerQuestionForm({questionId}) {
         
        
   
-        <Button label="Post Answer"className="ask-question" onClick={handleSubmit}  >
+        {userType === 'guest'? '' : <Button label="Post Answer"className="ask-question" onClick={handleSubmit} />}
         
-        </Button>
+  
       </div>
     );
   }
 
-
-  
-
-
-function linkAnswerToQuestion({questionId, questions, user, text}){
-  
-   
-
-
-
-
-
-}

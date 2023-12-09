@@ -36,7 +36,7 @@ views : {
     type : Number,
     default : 0,
 },
-__v : {
+votes : {
     type: Number,
     default : 0,
 },

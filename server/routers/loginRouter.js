@@ -4,51 +4,30 @@ const bcrypt = require('bcrypt')
 const userModel = require('../models/users')
 
 router.post('/', async (req, res) => {
-    const { email, password} = req.body;
+    const { username, password} = req.body;
+    
+   
     
 
 
   
     try {
-        if (!username || !email || !password || !pConfirmation) {
-            return res.status(400).json({ error: 'Invalid data: username, password, email or confirmation password' });
+        if (!username || !password ) {
+            return res.status(400).json({ error: 'Invalid data: username or password' });
+          }
+          //find a macthing user based on the username
+          const user = await userModel.findOne({  username: username });
+          if(!user){
+            return res.send('psw')
           }
 
-          //username in use
-            const userExist = await userModel.findOne({ username : username});
-            console.log('exist: ', userExist);
-            if(userExist){
-                console.log('here');
-                return res.send('user');
-            }
-            //user has an accout already
-            const emailExist = await userModel.findOne({ email : email});
-            if(emailExist){
-                return res.send('member');
-            }
-            //weak pasw
-            if (password.length < 8 || !password.match(pConfirmation)) {
-                return res.send('psw');
-              }
-              
-            const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-    
-            if (!password.match(passwordRegex)) {
-                return res.send('psw');
-            }
-              const saltRounds = 10;
-              const hashedPassword = await bcrypt.hash(password, saltRounds);
-            
-            const user = new userModel ({
-                username : username,
-                email : email,
-                password : hashedPassword,
-            });
-            const saveUser = await user.save();
+          const passwordMatching = await bcrypt.compare(password, user.password);
+          if(!passwordMatching){
+            return res.send('psw');
+          }
         
-        
-        res.send('new user created');
-        
+        res.send('authentication approved'); 
+         
     
       } catch (error) {
         console.error('Error adding answer:', error); 
@@ -56,4 +35,4 @@ router.post('/', async (req, res) => {
       } 
     
   });
-  module.exports = router;
+  module.exports = router; 

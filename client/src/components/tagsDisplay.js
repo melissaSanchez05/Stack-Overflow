@@ -4,6 +4,7 @@ import Button from './button';
 import { Navigate, useNavigate } from 'react-router-dom';
 const tags_db = React.createContext();
 const questions_db = React.createContext();
+const userType = sessionStorage.getItem('userType');
 
 export function TagContent() {
   const [questions, setQuestions] = useState([]);
@@ -11,19 +12,24 @@ export function TagContent() {
   const [activeTag, setActiveTag] = useState(null);
   const navigate = useNavigate();
 
+
   useEffect(() => {
-    axios.get('http://localhost:8000/Tags')
-      .then(res => {
-     
+
+    const fetchData = async () => {
+      try {
+       
+        const res = await axios.get('http://localhost:8000/Tags');
         setQuestions(res.data.questions);
         setTags(res.data.tags);
-        
-        
-      })
-      .catch(error => {
+  
+      } catch (error) {
         console.error('Error fetching data:', error);
-      });
-  }, []); 
+      }
+    };
+    fetchData();
+  }, []);
+
+
 
   
  useEffect(() => {
@@ -55,11 +61,14 @@ export function TagContent() {
       <div className="tag-header">
         <span className="tag-header-text">{uniqueTags.length} tags </span>
         <span className="tag-header-text">All Tags</span>
-        <Button label="Ask Question" className="ask-question" to={'/AskQuestion'}/>
+        {userType === 'guest' ? '' : <Button label ="LogOut" className= "ask-question move-left logout-color" to={'/LogOut'} />}
+        {userType === 'guest' ? <Button label ="LogIn" className= "ask-question move-left" to={'/'} /> : ''}
+       
       </div>
-      <div className="tags_container"> 
+      <div className="tags_container overflow-page"> 
+
       {uniqueTags.length > 0 ? (uniqueTags.map((tag) => <DisplayTags key={tag._id} tag={tag} setActiveTag={setActiveTag} />)) 
-      : (<div className="question-no-found">No Questions Found</div>)}
+      : (<div className="question-no-found">No Results Found</div>)}
       </div>
     </div>
     </tags_db.Provider>

@@ -30,7 +30,7 @@ const secret = "secret-key";
       resave: false,
       saveUninitialized: true,
     })
-  ); 
+  );    
   
   
 //database routes set up + routers
@@ -39,7 +39,8 @@ const secret = "secret-key";
     app.use('/Answers',answerRouter)
     app.use('/AnswerQuestion',ansQuestionRouter)
     app.use('/Register',usersRouter)
-    app.use('/Login',usersRouter)
+    app.use('/Login',loginRouter)
+    app.use('/User',loginRouter)
 
     //testing
     app.get('/', (req, res) => {

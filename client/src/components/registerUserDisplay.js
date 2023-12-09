@@ -40,20 +40,20 @@ export function RegistrationForm(){
             if( req.data == 'user'){
                 //user already taken, try a new username
     
-                console.log('inside user');
+              
                 setInvalidUsername(true);
                 clearStates();
                 
                 
             }else if(req.data == 'psw'){
                 //password is weak or invalid
-                console.log('inside psw');
+            
                 setInvalidPassword(true);
                 clearStates();
                
                
             }else if(req.data === 'member'){
-                console.log('inside mem');
+                
                 //the user has an account already
                 setIsMember(true);
                 clearStates();
@@ -62,7 +62,7 @@ export function RegistrationForm(){
             }else{
              //if it is indeed a new user and passowrd is unique
              //make the user log in
-             console.log('inside else');
+             
              navigate('/Success');
             }
 
@@ -137,9 +137,3 @@ export function RegistrationForm(){
 export default RegistrationForm;
 
 
-/**
- *       <div className="input-box button">
-       
-        <input type="Submit" value="Register Now"/>
-      </div>
- */

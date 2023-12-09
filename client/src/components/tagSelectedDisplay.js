@@ -5,7 +5,7 @@ import Button from "./button";
 
 const tags_db = React.createContext();
 const questions_db = React.createContext();
-
+const userType = sessionStorage.getItem('userType')
 export function TagRelatedQuestions({tag_name}){
    const navigate = useNavigate();
     const [questions, setQuestions] = useState([]);
@@ -15,20 +15,21 @@ export function TagRelatedQuestions({tag_name}){
 
 
     useEffect(() => {
-        axios.get('http://localhost:8000/Tags/selected')
-          .then(res => {
-         
-            setQuestions(res.data.questions);
-           
-            setTags(res.data.tags);
 
-            
-            
-          })
-          .catch(error => {
+        const fetchData = async () => {
+          try {
+           
+            const res = await axios.get('http://localhost:8000/Tags/selected');
+            setQuestions(res.data.questions);
+            setTags(res.data.tags);
+      
+          } catch (error) {
             console.error('Error fetching data:', error);
-          });
-      }, []); 
+          }
+        };
+        fetchData();
+      }, []);
+
       
       const onQuestionClick = (questionId) => {
   
@@ -48,9 +49,11 @@ const relatedQs =  RelatedQuestions(questions, tags,tag_name);
     <tags_db.Provider value ={tags}>
         <>
         
-            <div className="main-nav-bar">
-            <div className="question-num">{relatedQs.length}  Questions Related to Tag : {tag_name}</div>
-            
+            <div className="related-tag-header">
+            <div className="tag-header-text-question">{relatedQs.length}  Questions Related to Tag : {tag_name}</div>
+            {userType === 'guest' ? <Button label ="LogIn" className= "ask-question move-left" to={'/'} /> 
+           : <Button label ="Ask Question" className= "ask-question move-left"  to={'/AskQuestion'} />}
+           {userType === 'guest' ? '' : <Button label ="LogOut" className= "ask-question move-left logout-color" to={'/LogOut'} />}
             </div>
             <div className="flush-left overflow-page">
         {relatedQs.length > 0 ? ( relatedQs.map(qs => < QuestionSummary key={qs._id} question={qs} onQuestionClick={onQuestionClick}/>))
@@ -77,7 +80,7 @@ function RelatedQuestions(questions, tags, tag_name){
   
       
     });
-    return related;
+    return related.reverse();
 }
 function TagMatch(tagId, tag_name, tags){
     const tag = tags;
@@ -99,7 +102,7 @@ function QuestionSummary({question , onQuestionClick}){
 
         return(
             <div className="post-summary">
-              <QuestionSummaryDisplay ans={question.answers.length} views={question.views}/>
+              <QuestionSummaryDisplay ans={question.answers.length} views={question.views} votes={question.votes}/>
               <QuestionMeta date={question.asked_date_time} user={question.asked_by} id={question._id} title={question.title} tags={question.tags} onQuestionClick={handleButton}/>
 
                    </div>
@@ -122,9 +125,13 @@ function QuestionMeta({date,user,id,title,tags, onQuestionClick}){
            </div>
     );
   }
-function QuestionSummaryDisplay({ans, views}){
+function QuestionSummaryDisplay({ans, views, votes}){
     return(
       <div className="post-summary-stats"> 
+            <div className="post-summary-stats-items">
+        <span id ="views" className="post-summary-stats-items d-front-weight d-white-space">{votes}</span>
+        <span className="post-summary-stats-items ">votes</span>
+      </div>
       <div className="post-summary-stats-items">
         <span className="post-summary-stats-items d-front-weight d-white-space">{ans}</span>
         <span className="post-summary-stats-items ">answers</span>
@@ -133,6 +140,7 @@ function QuestionSummaryDisplay({ans, views}){
         <span id ="views" className="post-summary-stats-items d-front-weight d-white-space">{views}</span>
         <span className="post-summary-stats-items ">views</span>
       </div>
+      
   </div>
     );
   }

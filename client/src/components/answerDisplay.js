@@ -3,25 +3,38 @@ import axios from "axios";
 import Button from "./button";
 import { useNavigate } from "react-router-dom";
 import React,{  useEffect, useState } from "react";
+import VoteButtonForm from "./voteButton";
 
-
+const userType = sessionStorage.getItem('userType');
+const username = sessionStorage.getItem('username');
 
 export function AnswerContent({questionId}){
   const [questions, setQuestions] = useState([]);
   const [answers, setAnswers] = useState([]);
-   
+
+
+
+ 
   useEffect(() => {
-    axios.get('http://localhost:8000/Answers')
-      .then(res => {
-   
+
+    const fetchData = async () => {
+      try {
+        const updateViews = await axios.post(`http://localhost:8000/Questions/${questionId}`);
+        
+        const res = await axios.get('http://localhost:8000/Answers');
         setQuestions(res.data.questions);
         setAnswers(res.data.answers);
-       
-      })
-      .catch(error => {
-        console.error('Error fetching data:', error);
-      });
-  }, []); 
+  
+      } catch (error) {
+        console.error('Error updating and fetching data:', error);
+      }
+    };
+  
+    fetchData();
+  }, [questionId]);
+
+
+
        
 
 
@@ -29,11 +42,14 @@ export function AnswerContent({questionId}){
     return <div>Loading...</div>;
   }
 
+
+  
+
       return(
 
            <>
             {questionId === '' ? (<div className="question-no-found">Error</div> )
-            : (<QuestionSummary questionId={questionId} questions={questions} answers={answers}/>)}
+            : (<QuestionSummary questionId={questionId} questions={questions} answers={answers}  />)}
             </>
 
       );
@@ -41,6 +57,7 @@ export function AnswerContent({questionId}){
 //answer corresponds to the qs id triggered, which will be used to find the corresoing
 //answers related to the current qs
 function QuestionSummary({questionId, questions, answers}){
+
 
     const current_qs = questions.filter(qs => {
       return qs._id === questionId;
@@ -50,37 +67,26 @@ function QuestionSummary({questionId, questions, answers}){
    
     
        const current_related_ans =  answers.filter((ans)=>{return  current_answersId.includes(ans._id); })
-      .sort(function(ans1,ans2){ return sortAnswerByDate(ans1, ans2);}).reverse();
+      .sort(function(ans1,ans2){ return sortAnswerByDate(ans1, ans2);});
 
-            //update the data base
-            
-    const submitUpdate = async () => {
-      try {
-        const updatedViews = Number(current_qs.flatMap(qs => qs.views)) + 1;//updates the views
-        const view =  {
-         views: updatedViews,
-          
-        };
-    
-        const req = await axios.post(`http://localhost:8000/Questions/${questionId}`,view);
-        console.log('response: ', req.data);
-       
       
-      } catch (error) {
-        console.error('Error adding answer:', error);
-      }
-    };
-     
-    submitUpdate();
+            
+
      
       
     return(
-        <>
-     <Button label ="Ask Question" className= "ask-question flush-right-button" to={`/AskQuestion`}/>
-      {current_qs.length > 0 ? ( current_qs.map((qs)=> <QuesitonDisplay key={qs._id} question={qs}/>)) : (<div className="question-no-found">No Questions Found</div>)}
+        <> 
+        <div className="question-header reduce-width">
+           {userType === 'guest' ? <Button label ="LogIn" className= "ask-question move-left" to={'/'} /> 
+           : <Button label ="Ask Question" className= "ask-question move-left" to={'/AskQuestion'} />}
+           {userType === 'guest' ? '' : <Button label ="LogOut" className= "ask-question move-left logout-color" to={'/LogOut'} />}
+           </div>
+      {current_qs.length > 0 ? ( current_qs.map((qs)=> <QuesitonDisplay key={qs._id} question={qs} />)) : (<div className="question-no-found">No Questions Found</div>)}
+      
       {current_related_ans.length > 0 ? (current_related_ans.map((answer)=> <RelatedAnswers key={answer._id} answer={answer}/>))
-      :(<div className="question-no-found">No Questions Found</div>)  }
-      <Button label ="Answer Question" className= "ask-question flush-right-b" to={`/AnswerQuestion/${questionId}`}/>
+      :(<div className="question-no-found">No Results Found</div>)  }
+      
+      {userType === 'guest' ? ('') : (<Button label ="Answer Question" className= "ask-question flush-right-b" to={`/AnswerQuestion/${questionId}`}/>)}
       </>
     );
     
@@ -92,7 +98,7 @@ function QuesitonDisplay({question}){
             <div className="answers-summmary post-summary">
             
             <QuestionMeta user={question.asked_by} date={question.asked_date_time}/>
-          <QuestionStats answer={question.answers.length} views={question.views}/>
+          <QuestionStats answer={question.answers.length} views={question.views} votes={question.votes} questionId={question._id} />
           
           <QuestionSummaryDisplay title={question.title} summary={question.text}/>
           
@@ -115,7 +121,98 @@ function QuestionSummaryDisplay({title, summary}){
         </div>
       );
  }
-function QuestionMeta({user, date, userClassName = '', timeClassName = ''}){
+function QuestionMeta({user, date}){
+  
+      return(
+        <div className="ans-summary-content-meta move-left">
+        <div className="ans-summary-content-meata-user"> 
+        
+          <span className= {`post-summary-stats-items user-meta`}>{user} </span>
+          
+        </div>
+        <div className="ans-summary-content-meata-user"> 
+        
+          <span className={`post-summary-stats-items time `}>{showRelativeTime(date)}</span>
+          
+        </div>
+
+        
+    
+        </div>
+      );
+}
+function QuestionStats({answer, views, votes, questionId}){
+
+
+  const handleUpvote = async () =>{
+
+    try{
+
+    const votes = await axios.post(`http://localhost:8000/Questions/Upvote/${questionId}/${username}`);
+    if(votes.data === 'reputation'){
+      alert('User is unable to vote.')
+    }
+    window.location.reload();
+    }catch(error){
+      console.error('Error Upvoting:', error);
+    }
+
+  };
+  const handleDownvote = async () =>{
+
+    try{
+
+    const votes = await axios.post(`http://localhost:8000/Questions/Downvote/${questionId}`);
+    window.location.reload();
+    }catch(error){
+      console.error('Error Downvoting:', error);
+    }
+ 
+  };
+      return(
+        <div className="post-summary-stats ans-summary-stats flex-s "> 
+        <div className="post-summary-stats-items ">
+          <span className="post-summary-stats-items d-front-weight d-white-space bold_text">{answer}</span>
+          <span className="post-summary-stats-items bold_text"> answers</span>
+        </div>
+        <div className="post-summary-stats-items">
+          <span className="post-summary-stats-items d-front-weight d-white-space bold_text">{views}</span>
+          <span className="post-summary-stats-items bold_text "> views</span>
+        </div>
+        <div className="post-summary-stats-items ">
+          <span className="post-summary-stats-items d-front-weight d-white-space bold_text">{votes}</span>
+          <span className="post-summary-stats-items bold_text"> votes</span>
+        </div>
+        {userType === 'guest' ? '' : <VoteButtonForm onUpvote={handleUpvote} onDownvote={handleDownvote}/> }
+    </div>
+      );
+}
+function AnswerMeta({user, date, votes, userClassName = '', timeClassName = '', answerId}){
+  const handleUpvote = async () =>{
+
+    try{
+
+    const votes = await axios.post(`http://localhost:8000/Answers/Upvote/${answerId}/${username}`);
+    if( votes.data == 'reputation'){
+      alert('User is unable to vote.');
+    }
+    window.location.reload();
+    }catch(error){
+      console.error('Error Upvoting:', error);
+    }
+
+  };
+  const handleDownvote = async () =>{
+
+    try{
+
+    const votes = await axios.post(`http://localhost:8000/Answers/Downvote/${answerId}`);
+    window.location.reload();
+    }catch(error){
+      console.error('Error Downvoting:', error);
+    }
+ 
+  };
       return(
         <div className="ans-summary-content-meta">
         <div className="ans-summary-content-meata-user"> 
@@ -128,37 +225,26 @@ function QuestionMeta({user, date, userClassName = '', timeClassName = ''}){
           <span className={`post-summary-stats-items time ${timeClassName}`}>{showRelativeTime(date)}</span>
           
         </div>
+        <div className="ans-summary-content-meata-user"> 
+        
+        <span className={`post-summary-stats-items time ${timeClassName}`}>{votes}</span>
+        
+      </div>
+        {userType === 'guest' ? '' : <VoteButtonForm onUpvote={handleUpvote} onDownvote={handleDownvote}/> }
     
         </div>
-      );
-}
-function QuestionStats({answer, views}){
-      return(
-        <div className="post-summary-stats ans-summary-stats flex-s "> 
-        <div className="post-summary-stats-items ">
-          <span className="post-summary-stats-items d-front-weight d-white-space bold_text">{answer}</span>
-          <span className="post-summary-stats-items bold_text"> answers</span>
-        </div>
-        <div className="post-summary-stats-items">
-          <span className="post-summary-stats-items d-front-weight d-white-space bold_text">{views}</span>
-          <span className="post-summary-stats-items bold_text "> views</span>
-        </div>
-    </div>
       );
 }
 function RelatedAnswers({answer}){
         return(
         
-            <div className="undo_border">
-              <QuestionMeta user={answer.ans_by} date={answer.ans_date_time} userClassName="d-color-g" timeClassName="clear-element"/>
+            <div className=" undo_border">
+              <AnswerMeta user={answer.ans_by} date={answer.ans_date_time} votes={answer.votes} userClassName="d-color-g" timeClassName="clear-element" answerId={answer._id}/>
 
-            <div className="answers-summmary post-summary">
-        
-          <div className="post-summary-content ans-summary-content ">
             <h3 className="post-summary-content-meta-text-container post-summary-content-title color_B">{answer.text}</h3>
 
-            </div>
-          </div>
+        
+   
           
           </div>
           

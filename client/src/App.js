@@ -7,7 +7,6 @@ import './stylesheets/register.css'
 import './stylesheets/success.css'
 import Header from './components/header';
 import { LeftSideMenu } from './components/mainPage';
-import DataTesting from './components/DataTesting';
 import { BrowserRouter, Routes, Route, useParams } from 'react-router-dom';
 import { QuestionsContent } from './components/questionDisplay';
 import { TagContent } from './components/tagsDisplay';
@@ -19,6 +18,8 @@ import LoginForm from './components/logIn';
 import ProfileForm from './components/profileDisplay';
 import RegistrationForm from './components/registerUserDisplay';
 import SuccessForm from './components/successDisplay';
+import LogOutForm from './components/logout';
+
 function HomePage(){
   return(
       <>
@@ -117,12 +118,21 @@ function Success(){
     </>
   );
 }
+function LogOut(){
+  return(
+    <>
+    <LogOutForm/>
+    </>
+  );
+}
+
 function App() {
   return (
 
 <BrowserRouter>
     <Routes>
         <Route path = '/' element={<LogIn/>}  />
+        <Route path = '/LogOut' element={<LogOut/>}  />
         <Route path = '/Home' element={<HomePage/>}  />
         <Route path = '/Profile' element={<Profile/>}  />
         <Route path = '/Success' element={<Success/>}  />

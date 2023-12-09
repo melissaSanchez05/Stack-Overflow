@@ -18,7 +18,7 @@ const Schema = mongoose.Schema;
         type : Date,
         default : Date.now,
     },
-    __v :{
+    votes :{
         type: Number,
         default : 0,
     },

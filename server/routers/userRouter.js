@@ -19,7 +19,7 @@ router.post('/', async (req, res) => {
             const userExist = await userModel.findOne({ username : username});
             console.log('exist: ', userExist);
             if(userExist){
-                console.log('here');
+                
                 return res.send('user');
             }
             //user has an accout already
@@ -57,13 +57,54 @@ router.post('/', async (req, res) => {
       } 
     
   });
-  router.get('/', async (req,res, next)=> {
-    try{
-    const [users] = await Promise.all([
-        userModel.find(), ]);
-        res.send({users})
+  router.post('/:username', async (req, res) => {
+    const { username} = req.params;
     
-    }catch(err){console.log(err)}
+
+
+  
+    try {
+        if (!username ) {
+            return res.status(400).json({ error: 'Invalid ' });
+          }
+
+        
+        res.send('new user created');
+        
+    
+      } catch (error) {
+        console.error('Error adding answer:', error); 
+        res.status(500).json({ error: 'Internal Server Error in adding answer' });
+      } 
+    
+  });
+router.get('/', async (req,res, next)=> {
+    try{
+        const [users] = await Promise.all([
+            userModel.find(), ]);
+            res.json({users})
+        }catch(err){console.log(err)}
+
 } );
+
+
+router.post('/UserDelete', async (req, res) => {
+   
+
+
+  
+    try {
+
+        
+        
+        res.send('deleated');
+        
+    
+      } catch (error) {
+        console.error('Error deleting user:', error); 
+        res.status(500).json({ error: 'Internal Server Error deleating user' });
+      } 
+    
+  });
 
   module.exports = router;

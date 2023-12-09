@@ -3,27 +3,31 @@ import axios from "axios";
 import React ,{useState, useEffect}from "react";
 import { useNavigate } from "react-router-dom";
 
-
+const username = sessionStorage.getItem('username');
 
 export function AskQuestionForm() {
     const [questionTitle, setQuestionTitle] = useState('');
     const [questionText, setQuestionText] = useState('');
     const [questionTags, setQuestionTags] = useState('');
-    const [questionUsername, setQuestionUsername] = useState('');
+
     const [questions, setQuestions] = useState([])
     const navigate = useNavigate()
-
     useEffect(() => {
-        axios.get('http://localhost:8000/Questions')
-          .then(res => {
-            setQuestions(res.data.questions);
+
+      const fetchData = async () => {
+        try {
+         
+          const res = await  axios.get('http://localhost:8000/Questions');
+          setQuestions(res.data.questions);
+          
     
-            
-          })
-          .catch(error => {
-            console.error('Error fetching data:', error);
-          });
-      }, []); 
+        } catch (error) {
+          console.error('Error fetching data:', error);
+        }
+      };
+      fetchData();
+    }, []);
+    
       if (questions.length === 0 ) {
         return <div>Loading...</div>;
       }
@@ -38,12 +42,12 @@ export function AskQuestionForm() {
           title: questionTitle,
           text: questionText,
           tags: questionTags.split(' '),
-          asked_by: questionUsername,
+          asked_by: username,
         };
         
-        
+       
         const req = await axios.post(`http://localhost:8000/Questions/AddQuestion`, newQuestion);
-        console.log(req.data);
+    
         navigate('/Questions/Newest');
 
       }catch(err){
@@ -92,16 +96,7 @@ export function AskQuestionForm() {
           <span className="error" id="question-tags-error"></span>
         </div>
   
-        <div className="input-div">
-          <span className="input-descriptor">Username*</span>
-          <input
-            className="input-question-username"
-            type="text"
-            value={questionUsername}
-            onChange={(e) => setQuestionUsername(e.target.value)}
-          />
-          <span className="error" id="question-username-error"></span>
-        </div>
+
   
         <Button label="Post Question"className="ask-question" onClick={handleSubmit} ></Button>
       </div>

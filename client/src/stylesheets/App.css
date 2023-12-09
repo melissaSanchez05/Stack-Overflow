@@ -25,6 +25,9 @@
     top: 50%;
 
 }
+.stack{
+    display: flex;
+}
 .header {
     position: fixed;
     width: 100%;
@@ -168,10 +171,23 @@ button.question-button{
     text-align: center;
     text-decoration: none;
 }
+.logout-color{
+    background-color: rgb(248, 246, 246) !important;
+    color :rgb(46, 91, 140) !important;
+    border-color: rgb(46, 91, 140) !important;
+}
+
+.related-tag-header{
+    height: 10%;
+
+    flex-direction: row;
+    justify-content: space-between;
+    width: 80%; 
+}
 .tag-header {
     padding-top: 20px;
     padding-bottom: 20px;
-    display: flex;
+    
     flex-direction: row;
     justify-content: space-between;
     width: 80%;
@@ -207,10 +223,10 @@ button.question-button{
 
 .post-summary{
     border-bottom: 3px dotted lightslategray;
-    padding-top: 20px;
+    padding-top: 6px;
     padding-left: 20x;
     padding-right: 20px;
-    padding-bottom: 20px;
+
     height: 10%;
     text-align: center; 
     position: relative;
@@ -268,12 +284,12 @@ button.post-summary-content-meta-tags{
 .post-summary-content-title{
     font-weight: 400;
     display: block;
-    font-size: 1.30769231rem;
+    font-size: 16px;
     word-break: break-word;
     width: 50%;
     height: 30%;
-    margin-top: 20px;
-     margin-bottom: 20px;
+    margin-top: 25px;
+     margin-bottom: 10px;
      text-align: left;
      color:#0095ff
 
@@ -334,6 +350,7 @@ button.post-summary-content-meta-tags{
     justify-content: center;
    
 }
+/*
 .post-summary-content-title{
     font-weight: 400;
     display: block;
@@ -346,10 +363,8 @@ button.post-summary-content-meta-tags{
      text-align: left;
      color:#0095ff
 
-
-
 }
-
+*/
 .overflow-page{
     overflow-y: auto;
     line-height: normal;
@@ -376,7 +391,7 @@ button.ask-question:focus{
 .ans-summary-content{
     border: 1px solid transparent;
     bottom: 115% !important;
-    width: 85% !important;
+    width: 72% !important;
 }
 .ans-summary-content-meta{
     border: 1px solid transparent;
@@ -442,7 +457,20 @@ button.ask-question:focus{
     text-decoration: underline;
     cursor: pointer;        
 }
+.move-left{
+    float: right !important;
 
+
+}
+.reduce-width{
+    width: 90% !important;
+}
+.tag-header-text-question {
+    font-size: 25px;
+    padding-left: 25px;
+    padding-top: 1%;
+    font-family: 'Geologica', sans-serif;
+}
 
 .tag-header-text {
     font-size: 25px;
@@ -451,7 +479,9 @@ button.ask-question:focus{
 }
 
 .undo_border{
-    border-top: unset !important;
+    margin-top: 2%;;
+    border-bottom: 3px dotted lightslategray;
+    height: 14%;
 }
 .d-color-g{
     color: green !important;

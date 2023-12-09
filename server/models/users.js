@@ -16,8 +16,22 @@ const Schema = mongoose.Schema;
     },
     email :{
         type: String,
-        default : this.username + '@gmail.com',
+        required : true,
+        default : this.id +'@gmail.com',
+        
     },
+    memberYear:{
+        type: Date,
+        default : Date.now,
+    },
+    reputation :{
+        type : Number,
+        default : 0,
+    },
+    qs_asked:{
+        type: Number,
+        default : 0,
+    }
  });
 
  UserSchema.virtual('url').get(function(){

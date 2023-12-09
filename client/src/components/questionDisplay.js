@@ -6,6 +6,8 @@ import axios from "axios";
 const tags_db= React.createContext();
 const questions_db = React.createContext();
 const answers_db  = React.createContext();
+const userType = sessionStorage.getItem('userType');
+
 
 export function QuestionsContent({activeTab}){
    
@@ -24,17 +26,22 @@ export function QuestionsContent({activeTab}){
       
     };
     useEffect(() => {
-        axios.get('http://localhost:8000/Questions')
-          .then(res => {
+
+        const fetchData = async () => {
+          try {
+           
+            const res = await axios.get('http://localhost:8000/Questions');
             setQuestions(res.data.questions);
             setTags(res.data.tags);
             setAnswers(res.data.answers);
-            
-          })
-          .catch(error => {
+      
+          } catch (error) {
             console.error('Error fetching data:', error);
-          });
-      }, []); 
+          }
+        };
+        fetchData();
+      }, []);
+    
       if (questions.length === 0 || answers.length === 0 || tags.length === 0) {
         return <div>Loading...</div>;
       }
@@ -71,7 +78,9 @@ function DefaultDisplay({  activeQuestionId, onQuestionClick, activeTab }){
     return(
      <>     <div className="question-header">
              <span className="content-header-text">All Questions</span> 
-           <Button label ="Ask Question" className= "ask-question" to={'/AskQuestion'} />
+           {userType === 'guest' ? <Button label ="LogIn" className= "ask-question" to={'/'} /> 
+           : <Button label ="Ask Question" className= "ask-question" to={'/AskQuestion'} />}
+           {userType === 'guest' ? '' : <Button label ="LogOut" className= "ask-question logout-color" to={'/LogOut'} />}
             <div className="main-nav-bar">
             <div className="question-num">{questionNumber}  Questions</div>
 
@@ -90,7 +99,7 @@ function DefaultDisplay({  activeQuestionId, onQuestionClick, activeTab }){
 function DisplayNewest({ setQuestionNumber,activeQuestionId, onQuestionClick }){
     const sortedQuestions = useContext(questions_db).sort((q1, q2) => {
         return sortQuestionsByDate(q1,q2);
-     }).reverse();
+     });
     useEffect(()=>{
         setQuestionNumber(sortedQuestions.length);
 
@@ -100,7 +109,7 @@ function DisplayNewest({ setQuestionNumber,activeQuestionId, onQuestionClick }){
       
         <>
             {sortedQuestions.length > 0 ? (sortedQuestions.map((question) => <QuestionSummary key={question._id} question={question} activeQuestionId={activeQuestionId} onQuestionClick={onQuestionClick}/>))
-            :( <div className="question-no-found">No Questions Found</div>)}
+            :( <div className="question-no-found">No Results Found</div>)}
             
         </>
 
@@ -134,14 +143,14 @@ function DisplayActive({ setQuestionNumber,activeQuestionId, onQuestionClick }){
     <>
     { qs_active.length > 0 ? 
      (qs_active.map((question) =><QuestionSummary key={question._id} question={question} activeQuestionId={activeQuestionId} onQuestionClick={onQuestionClick}/>)) 
-     : (<div className="question-no-found">No Questions Found</div>) }
+     : (<div className="question-no-found">No Results Found</div>) }
     
     </>
     );
 
 }
 function DisplayUnanswered({ setQuestionNumber ,activeQuestionId, onQuestionClick }){
-    console.log('active function: unanswered');
+  
     const noAnswerQuestions = useContext(questions_db).filter((qs) => { return qs.answers.length === 0}).reverse();
     useEffect(()=>{
         setQuestionNumber(noAnswerQuestions.length);
@@ -151,7 +160,7 @@ function DisplayUnanswered({ setQuestionNumber ,activeQuestionId, onQuestionClic
     <>
         {(noAnswerQuestions.length > 0) ? 
         (noAnswerQuestions.map((quesiton) => <QuestionSummary key={quesiton._id} question={quesiton} activeQuestionId={activeQuestionId} onQuestionClick={onQuestionClick}/>))
-        :(<div className="question-no-found">No Questions Found</div>)}
+        :(<div className="question-no-found">No Results Found</div>)}
     
     </>);
 
@@ -285,7 +294,7 @@ function QuestionSummary({question , onQuestionClick}){
 
         return(
             <div className="post-summary">
-              <QuestionSummaryDisplay ans={question.answers.length} views={question.views}/>
+              <QuestionSummaryDisplay ans={question.answers.length} views={question.views} votes={question.votes}/>
               <QuestionMeta date={question.asked_date_time} user={question.asked_by} id={question._id} title={question.title} tags={question.tags} onTitleClick={handleButton}/>
 
                    </div>
@@ -308,9 +317,13 @@ function QuestionMeta({date,user,id,title,tags, onTitleClick}){
          </div>
   );
 }
-function QuestionSummaryDisplay({ans, views}){
+function QuestionSummaryDisplay({ans, views, votes}){
   return(
     <div className="post-summary-stats"> 
+        <div className="post-summary-stats-items">
+            <span id ="views" className="post-summary-stats-items d-front-weight d-white-space">{votes}</span>
+        <span className="post-summary-stats-items ">votes</span>
+        </div>
     <div className="post-summary-stats-items">
       <span className="post-summary-stats-items d-front-weight d-white-space">{ans}</span>
       <span className="post-summary-stats-items ">answers</span>
