@@ -39,46 +39,55 @@ router.get('/', async (req,res)=> {
 
 router.post('/AddQuestion', async (req, res) =>{
         const {title, text, tags, asked_by} = req.body;
-        console.log('asked: ', asked_by);
+        
         
         if (!title || !text || !tags || !asked_by) {
             return res.status(400).json({ error: 'Invalid data: text and ans_by are required' });
           }
         try{
-
+            if(title.length > 50 || text.length > 140){
+                return res.send('fail')
+            }
               
-
+            const user = await userModel.findOne({username : asked_by});
+            if(!user){
+                return res.send('fail');
+            }
             const tagArray = await Promise.all(
                 tags.map(async (tag) => {
                   const existingTag = await tagsModel.findOne({ name: tag });
           
                   if (existingTag) {
+                   
                     return existingTag._id;
-                  } else {
+                  } else if(user.reputation >= 50) {
+                  
                     const newTag = new tagsModel({ name: tag });
                     const saveTag = await newTag.save();
                     return saveTag._id;
                   }
+                  
+                  
                 })
               );
-                
-
+              const filteredTagArray = tagArray.filter((tagId) => tagId !== undefined);
+      
               const question = new questionModel({
                 title : title,
                 text : text,
-                tags : tagArray,
+                tags : filteredTagArray,
                 asked_by : asked_by,
 
               }) 
               const savedQuestion = await question.save();
               //update the user's question count
-              const user = await userModel.findOneAndUpdate( 
-                { username : asked_by},
+              const userUpdate = await userModel.findByIdAndUpdate( 
+                user._id,
                 { $inc: {qs_asked : 1}}, 
                 {new : true}
               );
-              console.log('user: ', user);
-              if(!user){
+              console.log('user: ', userUpdate);
+              if(!userUpdate){
                 return res.status(400).json({ error: 'Not able to update user' });
               }
               

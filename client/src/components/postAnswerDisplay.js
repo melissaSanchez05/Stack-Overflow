@@ -54,7 +54,7 @@ export function AnswerQuestionForm({questionId}) {
     
       const req = await axios.post(`http://localhost:8000/AnswerQuestion/${questionId}`,answer);
     
-      navigate('/Questions/Newest');
+      window.history.back();
       //console.log('Answer added', req.data);
        
   

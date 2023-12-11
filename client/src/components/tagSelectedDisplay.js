@@ -51,11 +51,11 @@ const relatedQs =  RelatedQuestions(questions, tags,tag_name);
         
             <div className="related-tag-header">
             <div className="tag-header-text-question">{relatedQs.length}  Questions Related to Tag : {tag_name}</div>
-            {userType === 'guest' ? <Button label ="LogIn" className= "ask-question move-left" to={'/'} /> 
-           : <Button label ="Ask Question" className= "ask-question move-left"  to={'/AskQuestion'} />}
-           {userType === 'guest' ? '' : <Button label ="LogOut" className= "ask-question move-left logout-color" to={'/LogOut'} />}
+            {userType === 'guest' ? <Button label ="LogIn" className= "ask-question move-right" to={'/'} /> 
+           : <Button label ="Ask Question" className= "ask-question move-right"  to={'/AskQuestion'} />}
+           {userType === 'guest' ? '' : <Button label ="LogOut" className= "ask-question move-right logout-color" to={'/LogOut'} />}
             </div>
-            <div className="flush-left overflow-page">
+            <div className="flush-left overflow-page bottom-space">
         {relatedQs.length > 0 ? ( relatedQs.map(qs => < QuestionSummary key={qs._id} question={qs} onQuestionClick={onQuestionClick}/>))
         :(<div className="question-no-found">No Questions Found</div>)}</div>
         

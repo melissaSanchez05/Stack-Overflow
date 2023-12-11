@@ -126,7 +126,7 @@ router.post('/AddComment/:answerId/:username', async (req, res) => {
     const {text, comment_by} = req.body;
     const {answerId, username} = req.params;
     
-    
+    console.log('text len', text.length);
 
   
     try {
@@ -135,7 +135,7 @@ router.post('/AddComment/:answerId/:username', async (req, res) => {
             return res.status(400).json({ error: 'Invalid data: text and comment_by are required' });
           }
           //the comment text can't exead 140 chars
-          if(text.length() > 140){
+          if(text.length > 140){
             return res.send('fail');
           }
           //user commeting must have more than 50 rep points

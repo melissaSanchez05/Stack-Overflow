@@ -10,7 +10,7 @@ export function CommentsForm({answerId}){
 
     const [commentText, setCommentText] = useState('');
 
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
 
 
@@ -36,9 +36,10 @@ export function CommentsForm({answerId}){
     
       const req = await axios.post(`http://localhost:8000/Answers/AddComment/${answerId}/${username}`,comment);
       if(req.data === 'fail'){
-        alert('Not able to add comment');
+        alert('Not able to add comment, not enough reputation points');
       }
-      navigate('/Questions/Newest');
+      
+      window.history.back();
       //console.log('Answer added', req.data);
        
   

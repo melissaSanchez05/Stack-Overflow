@@ -47,8 +47,10 @@ export function AskQuestionForm() {
         
        
         const req = await axios.post(`http://localhost:8000/Questions/AddQuestion`, newQuestion);
-    
-        navigate('/Questions/Newest');
+         if(req.data === 'fail'){
+          alert('Question was unable to be added.')
+         }
+        window.history.back();
 
       }catch(err){
         console.error('Error creating question:', err);
@@ -62,7 +64,7 @@ export function AskQuestionForm() {
       <div className="form-container">
         <div className="input-div">
           <span className="input-descriptor">Question Title*</span>
-          <span className="input-field-descript">Limit title to 100 characters or less</span>
+          <span className="input-field-descript">Limit title to 50 characters or less</span>
           <input
             className="input-question-title"
             type="text"

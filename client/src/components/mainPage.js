@@ -26,12 +26,7 @@ const userType = sessionStorage.getItem('userType')
     const getMenuItemClassName = (tab) => {
       return `left-menu-text selectable ${tab === activeButton ? 'selected-menu' : ''}`;
   };
-  const onPrev = () =>{
-}
 
-const onNext = () =>{
-
-  }
  
 
 

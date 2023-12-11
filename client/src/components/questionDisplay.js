@@ -114,10 +114,11 @@ function DisplayNewest({ setQuestionNumber,activeQuestionId, onQuestionClick ,cu
     const sortedQuestions = useContext(questions_db).sort((q1, q2) => {
         return sortQuestionsByDate(q1,q2);
      });
+     
     useEffect(()=>{
         setQuestionNumber(sortedQuestions.length);
 
-    },[ sortedQuestions, setQuestionNumber]);
+    },[ setQuestionNumber]);
 
     const indexOfLastQuestion = currentPage * questionsPerPage;
     const indexOfFirstQuestion = indexOfLastQuestion - questionsPerPage;

@@ -61,8 +61,8 @@ export function TagContent() {
       <div className="tag-header">
         <span className="tag-header-text">{uniqueTags.length} tags </span>
         <span className="tag-header-text">All Tags</span>
-        {userType === 'guest' ? '' : <Button label ="LogOut" className= "ask-question move-left logout-color" to={'/LogOut'} />}
-        {userType === 'guest' ? <Button label ="LogIn" className= "ask-question move-left" to={'/'} /> : ''}
+        {userType === 'guest' ? '' : <Button label ="LogOut" className= "ask-question move-right logout-color" to={'/LogOut'} />}
+        {userType === 'guest' ? <Button label ="LogIn" className= "ask-question move-right" to={'/'} /> : ''}
        
       </div>
       <div className="tags_container overflow-page"> 

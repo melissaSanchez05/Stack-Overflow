@@ -54,6 +54,7 @@ export function AnswerContent({questionId}){
            <>
             {questionId === '' ? (<div className="question-no-found">Error</div> )
             : (<QuestionSummary questionId={questionId} questions={questions} answers={answers} handleComment={handleComment} />)}
+               
             </>
 
       );
@@ -80,19 +81,20 @@ function QuestionSummary({questionId, questions, answers, handleComment}){
       
     return(
         <> 
-        <div className="question-header reduce-width">
-           {userType === 'guest' ? <Button label ="LogIn" className= "ask-question move-left" to={'/'} /> : <Button label ="Ask Question" className= "ask-question move-left" to={'/AskQuestion'} />}
-           {userType === 'guest' ? '' : <Button label ="LogOut" className= "ask-question move-left logout-color" to={'/LogOut'} />}
-           {userType === 'guest' ? '' : <Button label ="LogOut" className= "ask-question move-left logout-color" to={'/LogOut'} />}
+        <div className="question-header reduce-width ">
+        
+           {userType === 'guest' ? '' : <Button label ="LogOut" className= "ask-question move-right logout-color" to={'/LogOut'} />}
+           {userType === 'guest' ? <Button label ="LogIn" className= "ask-question move-right " to={'/'} /> : <Button label ="Ask Question" className= "ask-question move-right" to={'/AskQuestion'} />}
            
 
            </div>
       {current_qs.length > 0 ? ( current_qs.map((qs)=> <QuesitonDisplay key={qs._id} question={qs} />)) : (<div className="question-no-found">No Questions Found</div>)}
-      
+      <div className="overflow-page ans-conteiner">
       {current_related_ans.length > 0 ? (current_related_ans.map((answer)=> <RelatedAnswers key={answer._id} answer={answer} handleComment={handleComment}/>))
       :(<div className="question-no-found">No Results Found</div>)  }
-      
-      {userType === 'guest' ? ('') : (<Button label ="Answer Question" className= "ask-question flush-right-b" to={`/AnswerQuestion/${questionId}`}/>)}
+       {userType === 'guest' ? ('') : (<Button label ="Answer Question" className= "ask-question flush-right-b" to={`/AnswerQuestion/${questionId}`}/>)}
+      </div>
+   
       </>
     );
     
@@ -102,11 +104,13 @@ function QuesitonDisplay({question}){
         return(
  
             <div className="answers-summmary post-summary">
-            
             <QuestionMeta user={question.asked_by} date={question.asked_date_time}/>
+            
+            
           <QuestionStats answer={question.answers.length} views={question.views} votes={question.votes} questionId={question._id} />
-          
+  
           <QuestionSummaryDisplay title={question.title} summary={question.text}/>
+
           
           
           </div>
@@ -130,7 +134,7 @@ function QuestionSummaryDisplay({title, summary}){
 function QuestionMeta({user, date}){
   
       return(
-        <div className="ans-summary-content-meta move-left">
+        <div className="ans-summary-content-meta ">
         <div className="ans-summary-content-meata-user"> 
         
           <span className= {`post-summary-stats-items user-meta`}>{user} </span>
@@ -176,7 +180,8 @@ function QuestionStats({answer, views, votes, questionId}){
  
   };
       return(
-        <div className="post-summary-stats ans-summary-stats flex-s "> 
+      
+        <div className="ppost-summary-stats ans-summary-stats flex-s">         
         <div className="post-summary-stats-items ">
           <span className="post-summary-stats-items d-front-weight d-white-space bold_text">{answer}</span>
           <span className="post-summary-stats-items bold_text"> answers</span>
@@ -189,8 +194,13 @@ function QuestionStats({answer, views, votes, questionId}){
           <span className="post-summary-stats-items d-front-weight d-white-space bold_text">{votes}</span>
           <span className="post-summary-stats-items bold_text"> votes</span>
         </div>
-        {userType === 'guest' ? '' : <VoteButtonForm onUpvote={handleUpvote} onDownvote={handleDownvote} showDownvote={true}/> }
+        <div className="post-summary-stats-items ">
+          {userType === 'guest' ? '' : <VoteButtonForm onUpvote={handleUpvote} onDownvote={handleDownvote} showDownvote={true}/> }
+        </div>
+      
     </div>
+    
+    
       );
 }
 function AnswerMeta({user, date, votes, userClassName = '', timeClassName = '', answerId, handleComment}){
@@ -361,10 +371,7 @@ function CommentsDisplay({comment}){
     }
 
   };
-  const handleDownvote = () =>{
 
-  alert('Downvotting is not allowed');
-  };
   return(
       <>
 
@@ -379,18 +386,18 @@ function CommentsDisplay({comment}){
               
                   
                   <br/>
-                  <p className="comment-text color-b">{comment.text}
+                  <p className="d-white-space comment-text color-b">{comment.text}
                   <span className="color-b"> - By {comment.comment_by}</span>
                  </p>
                  <span className="color-b d-white-space"> {comment.votes} votes</span>
-                 <span className=" move-left">{showRelativeTime(comment.comment_date_time)}</span>
+                 <span className=" d-white-space move-left">{showRelativeTime(comment.comment_date_time)}</span>
                   
                   
               </div>
           </div>
 
       </div>
-      {userType === 'guest' ? '' : <VoteButtonForm onUpvote={handleUpvote} onDownvote={handleDownvote} showDownvote={false}/> }
+      {userType === 'guest' ? '' : <VoteButtonForm onUpvote={handleUpvote}  showDownvote={false} /> }
   </div>
 </section>
       
