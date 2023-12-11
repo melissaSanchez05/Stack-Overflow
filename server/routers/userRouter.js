@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const bcrypt = require('bcrypt')
 const userModel = require('../models/users')
-
+const questionModel= require('../models/questions')
 
 router.post('/', async (req, res) => {
     const { username, email, password, pConfirmation} = req.body;
@@ -80,9 +80,9 @@ router.post('/', async (req, res) => {
   });
 router.get('/', async (req,res, next)=> {
     try{
-        const [users] = await Promise.all([
-            userModel.find(), ]);
-            res.json({users})
+        const [users, questions] = await Promise.all([
+            userModel.find(), questionModel.find()]);
+            res.json({users, questions})
         }catch(err){console.log(err)}
 
 } );

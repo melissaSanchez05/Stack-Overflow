@@ -199,8 +199,12 @@ button.question-button{
     left: 15%;
     height: 100%;
     border-top: 3px dotted lightslategray;
-    
 
+
+
+}
+.bottom-space{
+    height: 70% !important;
 
 }
 .user-meta{
@@ -223,7 +227,7 @@ button.question-button{
 
 .post-summary{
     border-bottom: 3px dotted lightslategray;
-    padding-top: 6px;
+
     padding-left: 20x;
     padding-right: 20px;
 
@@ -555,3 +559,36 @@ button.ask-question:focus{
     font-size: 13px;
     color: red;
 }
+/* next prev buttons*/
+
+a {
+    text-decoration: none;
+    display: inline-block;
+    padding: 8px 16px;
+  }
+  
+  a:hover {
+    background-color: #ddd;
+    color: black;
+  }
+  
+  .previous {
+    background-color: #f1f1f1;
+    color: black;
+  }
+  
+  .next {
+    background-color: #f48225;
+    color: white;
+  }
+  
+  .footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #f1f1f1;
+    padding: 10px;
+    text-align: center;
+  }
+  

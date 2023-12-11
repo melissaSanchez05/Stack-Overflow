@@ -11,7 +11,7 @@ const username = sessionStorage.getItem('username');
 export function AnswerContent({questionId}){
   const [questions, setQuestions] = useState([]);
   const [answers, setAnswers] = useState([]);
-
+  const navigate = useNavigate();
 
 
  
@@ -33,7 +33,11 @@ export function AnswerContent({questionId}){
     fetchData();
   }, [questionId]);
 
-
+ const handleComment = (ansId) =>{
+    if(ansId != null){
+     navigate(`/AddComment/${ansId}`)
+    }
+ }
 
        
 
@@ -49,14 +53,14 @@ export function AnswerContent({questionId}){
 
            <>
             {questionId === '' ? (<div className="question-no-found">Error</div> )
-            : (<QuestionSummary questionId={questionId} questions={questions} answers={answers}  />)}
+            : (<QuestionSummary questionId={questionId} questions={questions} answers={answers} handleComment={handleComment} />)}
             </>
 
       );
 }
 //answer corresponds to the qs id triggered, which will be used to find the corresoing
 //answers related to the current qs
-function QuestionSummary({questionId, questions, answers}){
+function QuestionSummary({questionId, questions, answers, handleComment}){
 
 
     const current_qs = questions.filter(qs => {
@@ -77,13 +81,15 @@ function QuestionSummary({questionId, questions, answers}){
     return(
         <> 
         <div className="question-header reduce-width">
-           {userType === 'guest' ? <Button label ="LogIn" className= "ask-question move-left" to={'/'} /> 
-           : <Button label ="Ask Question" className= "ask-question move-left" to={'/AskQuestion'} />}
+           {userType === 'guest' ? <Button label ="LogIn" className= "ask-question move-left" to={'/'} /> : <Button label ="Ask Question" className= "ask-question move-left" to={'/AskQuestion'} />}
            {userType === 'guest' ? '' : <Button label ="LogOut" className= "ask-question move-left logout-color" to={'/LogOut'} />}
+           {userType === 'guest' ? '' : <Button label ="LogOut" className= "ask-question move-left logout-color" to={'/LogOut'} />}
+           
+
            </div>
       {current_qs.length > 0 ? ( current_qs.map((qs)=> <QuesitonDisplay key={qs._id} question={qs} />)) : (<div className="question-no-found">No Questions Found</div>)}
       
-      {current_related_ans.length > 0 ? (current_related_ans.map((answer)=> <RelatedAnswers key={answer._id} answer={answer}/>))
+      {current_related_ans.length > 0 ? (current_related_ans.map((answer)=> <RelatedAnswers key={answer._id} answer={answer} handleComment={handleComment}/>))
       :(<div className="question-no-found">No Results Found</div>)  }
       
       {userType === 'guest' ? ('') : (<Button label ="Answer Question" className= "ask-question flush-right-b" to={`/AnswerQuestion/${questionId}`}/>)}
@@ -183,11 +189,11 @@ function QuestionStats({answer, views, votes, questionId}){
           <span className="post-summary-stats-items d-front-weight d-white-space bold_text">{votes}</span>
           <span className="post-summary-stats-items bold_text"> votes</span>
         </div>
-        {userType === 'guest' ? '' : <VoteButtonForm onUpvote={handleUpvote} onDownvote={handleDownvote}/> }
+        {userType === 'guest' ? '' : <VoteButtonForm onUpvote={handleUpvote} onDownvote={handleDownvote} showDownvote={true}/> }
     </div>
       );
 }
-function AnswerMeta({user, date, votes, userClassName = '', timeClassName = '', answerId}){
+function AnswerMeta({user, date, votes, userClassName = '', timeClassName = '', answerId, handleComment}){
   const handleUpvote = async () =>{
 
     try{
@@ -227,19 +233,40 @@ function AnswerMeta({user, date, votes, userClassName = '', timeClassName = '', 
         </div>
         <div className="ans-summary-content-meata-user"> 
         
-        <span className={`post-summary-stats-items time ${timeClassName}`}>{votes}</span>
+        <span className={`post-summary-stats-items time ${timeClassName}`}>{votes} votes</span>
         
       </div>
-        {userType === 'guest' ? '' : <VoteButtonForm onUpvote={handleUpvote} onDownvote={handleDownvote}/> }
+        {userType === 'guest' ? '' : <VoteButtonForm onUpvote={handleUpvote} onDownvote={handleDownvote} showDownvote={true}/> }
+        {userType === 'guest' ? '' : <Button label ="Add comment" className= "ask-question move-left logout-color" onClick={() => handleComment(answerId)} />}
     
         </div>
       );
 }
-function RelatedAnswers({answer}){
-        return(
+function RelatedAnswers({answer, handleComment}){
+  const [comments, setComments] = useState([]);
+  useEffect(() => {
+
+    const fetchData = async () => {
+      try {
+       
         
+        const res = await axios.get('http://localhost:8000/Answers/Comments');
+        setComments(res.data.comments);
+       
+  
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+  
+    fetchData();
+  }, []);
+
+   const comment = comments.filter( com => answer.comments.includes(com._id)).sort((c1, c2) => { return sortAnswerByDate(c1,c2)}).reverse();
+        return(
+        <>
             <div className=" undo_border">
-              <AnswerMeta user={answer.ans_by} date={answer.ans_date_time} votes={answer.votes} userClassName="d-color-g" timeClassName="clear-element" answerId={answer._id}/>
+              <AnswerMeta user={answer.ans_by} date={answer.ans_date_time} votes={answer.votes} userClassName="d-color-g" timeClassName="clear-element" answerId={answer._id} handleComment={handleComment}/>
 
             <h3 className="post-summary-content-meta-text-container post-summary-content-title color_B">{answer.text}</h3>
 
@@ -247,7 +274,9 @@ function RelatedAnswers({answer}){
    
           
           </div>
-          
+
+          { comment.map((com) =><CommentsDisplay key={com._id} comment={com}/> )}
+          </>
           
         );
 }           
@@ -318,4 +347,54 @@ function sortAnswerByDate(ans1, ans2){
     }return ans2;
 
 
+}
+function CommentsDisplay({comment}){
+  const handleUpvote = async () =>{
+
+    try{
+
+    const votes = await axios.post(`http://localhost:8000/Answers/Comments/Upvote/${comment._id}`);
+   
+    window.location.reload();
+    }catch(error){
+      console.error('Error Upvoting:', error);
+    }
+
+  };
+  const handleDownvote = () =>{
+
+  alert('Downvotting is not allowed');
+  };
+  return(
+      <>
+
+
+<section>
+  <div className="container">
+      <div className="row">
+          <div className="col-sm-5 col-md-6 col-12 pb-4">
+
+              <div className="comment mt-4 text-justify float-left">
+                  
+              
+                  
+                  <br/>
+                  <p className="comment-text color-b">{comment.text}
+                  <span className="color-b"> - By {comment.comment_by}</span>
+                 </p>
+                 <span className="color-b d-white-space"> {comment.votes} votes</span>
+                 <span className=" move-left">{showRelativeTime(comment.comment_date_time)}</span>
+                  
+                  
+              </div>
+          </div>
+
+      </div>
+      {userType === 'guest' ? '' : <VoteButtonForm onUpvote={handleUpvote} onDownvote={handleDownvote} showDownvote={false}/> }
+  </div>
+</section>
+      
+      
+      </>
+  );
 }

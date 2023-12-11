@@ -20,14 +20,37 @@ body {
     background: rgb(241, 238, 236);
 }
 */
+.p-containter{
+    width: 90% !important;
+    height: 80% !important;
+    background-color: #dc8850 !important;
+    
+}
+.move-left{
+    float:  left !important;
+
+}
+.card-qs {
+margin-top: 5% !important;
+margin-left: 10%;
+width: 80% !important;
+height: 80% !important;
+background-color: #dc8850 !important;
+margin-bottom: 5% !important;
+
+
+   
+}
 .card {
 	color:#fff;
-    width: 350px;
+
     border-radius: 10px;
    background: linear-gradient(145deg, #dc8850,  #dc8850);
-box-shadow:  20px 20px 60px #d7a764, 
-             -20px -20px 60px #d7a764;
-    border: none
+
+    border: none ;
+    display: flex;
+    justify-content: center !important;
+    align-items: center;
 }
 
 .neo-button {

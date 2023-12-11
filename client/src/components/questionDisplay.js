@@ -2,7 +2,7 @@ import React ,{useState, useEffect, useContext}from "react";
 import Button from "./button";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-
+import { NextPrevButton } from "./nextPrevButton";
 const tags_db= React.createContext();
 const questions_db = React.createContext();
 const answers_db  = React.createContext();
@@ -46,6 +46,8 @@ export function QuestionsContent({activeTab}){
         return <div>Loading...</div>;
       }
 
+      
+
   return(
     <answers_db.Provider value={answers}>   
     <questions_db.Provider value={questions}>
@@ -53,22 +55,30 @@ export function QuestionsContent({activeTab}){
     
     
          <DefaultDisplay  activeQuestionId={activeQuestionId} onQuestionClick={handleQuestionClick} activeTab={activeTab}/>
-        
+       
           </tags_db.Provider>
           </questions_db.Provider>
           </answers_db.Provider>
   );
 }
 
-function DefaultDisplay({  activeQuestionId, onQuestionClick, activeTab }){
+function DefaultDisplay({  activeQuestionId, onQuestionClick, activeTab}){
     
     const [questionNumber, setQuestionNumber] = useState(0);
-  
+    const [currentPage, setCurrentPage] = useState(1);
+    const questionsPerPage = 5;
+    const onPrev = () =>{
+        setCurrentPage((prevPage) => prevPage + 1);
+    }
 
+    const onNext = () =>{
+        setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
+
+      }
     
 
     const components = {
-        Newest: <DisplayNewest  setQuestionNumber={setQuestionNumber} activeQuestionId={activeQuestionId} onQuestionClick={onQuestionClick} />,
+        Newest: <DisplayNewest  setQuestionNumber={setQuestionNumber} activeQuestionId={activeQuestionId} onQuestionClick={onQuestionClick} currentPage={currentPage}questionsPerPage={questionsPerPage}/>,
         Active: <DisplayActive setQuestionNumber={setQuestionNumber}activeQuestionId={activeQuestionId} onQuestionClick={onQuestionClick}/>,
         Unanswered:<DisplayUnanswered setQuestionNumber={setQuestionNumber} activeQuestionId={activeQuestionId} onQuestionClick={onQuestionClick}/>,
     };
@@ -77,10 +87,12 @@ function DefaultDisplay({  activeQuestionId, onQuestionClick, activeTab }){
     
     return(
      <>     <div className="question-header">
+        
              <span className="content-header-text">All Questions</span> 
            {userType === 'guest' ? <Button label ="LogIn" className= "ask-question" to={'/'} /> 
            : <Button label ="Ask Question" className= "ask-question" to={'/AskQuestion'} />}
            {userType === 'guest' ? '' : <Button label ="LogOut" className= "ask-question logout-color" to={'/LogOut'} />}
+           
             <div className="main-nav-bar">
             <div className="question-num">{questionNumber}  Questions</div>
 
@@ -91,12 +103,14 @@ function DefaultDisplay({  activeQuestionId, onQuestionClick, activeTab }){
               
             </div>
           </div>
-          <div className="flush-left overflow-page">{components[activeTab]}</div>
+          <div className="flush-left overflow-page bottom-space">{components[activeTab]}</div>
+        
           </div>
+          <NextPrevButton onPrev={onPrev} onNext={onNext} />
  </>
     );
 }
-function DisplayNewest({ setQuestionNumber,activeQuestionId, onQuestionClick }){
+function DisplayNewest({ setQuestionNumber,activeQuestionId, onQuestionClick ,currentPage, questionsPerPage}){
     const sortedQuestions = useContext(questions_db).sort((q1, q2) => {
         return sortQuestionsByDate(q1,q2);
      });
@@ -105,6 +119,10 @@ function DisplayNewest({ setQuestionNumber,activeQuestionId, onQuestionClick }){
 
     },[ sortedQuestions, setQuestionNumber]);
 
+    const indexOfLastQuestion = currentPage * questionsPerPage;
+    const indexOfFirstQuestion = indexOfLastQuestion - questionsPerPage;
+    const currentQuestions = sortedQuestions.slice(indexOfFirstQuestion, indexOfLastQuestion);
+  
     return(
       
         <>

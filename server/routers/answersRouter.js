@@ -3,12 +3,19 @@ const router = express.Router()
 const answerModel = require('../models/answers')
 const questionModel = require('../models/questions')
 const userModel = require('../models/users')
-
+const commentModel = require('../models/comments')
 router.get('/', async (req,res)=> {
     try{
     const [questions,answers] = await Promise.all([
         questionModel.find(), answerModel.find(),]);
         res.json({questions, answers})
+    }catch(err){console.log(err)}
+} );
+router.get('/Comments', async (req,res)=> {
+    try{
+    const [comments] = await Promise.all([
+        commentModel.find(), ]);
+        res.json({comments})
     }catch(err){console.log(err)}
 } );
 router.post('/Upvote/:answerId/:username', async (req, res) => {
@@ -111,6 +118,89 @@ router.post('/Downvote/:answerId', async (req, res) => {
       } catch (error) {
         console.error('Error updating Answer by downvoting:', error); 
         res.status(500).json({ error: 'Internal Server Error in updating a answer' });
+      } 
+    
+});
+router.post('/AddComment/:answerId/:username', async (req, res) => {
+   
+    const {text, comment_by} = req.body;
+    const {answerId, username} = req.params;
+    
+    
+
+  
+    try {
+
+        if (!text || !comment_by) {
+            return res.status(400).json({ error: 'Invalid data: text and comment_by are required' });
+          }
+          //the comment text can't exead 140 chars
+          if(text.length() > 140){
+            return res.send('fail');
+          }
+          //user commeting must have more than 50 rep points
+          //find usesr
+          const existingVoter = await userModel.findOne({username : username});
+            if(!existingVoter){
+                return res.status(404).json({ error: 'Voter not found' });
+            }
+            if(existingVoter.reputation < 50){
+                return res.send('fail')
+            }
+            //user have enough reputaiton points to add a comment
+            //create the comment and add to DB
+            const comment = new commentModel({
+                text: text,
+                comment_by : comment_by,
+
+            });
+
+            const saveComment = await comment.save();
+            //add comment id to related answer
+            const ansCommented = await answerModel.findByIdAndUpdate(
+                answerId,
+                { $push : { comments : saveComment._id}},
+                {new : true}
+            );
+            
+
+   
+        res.send('comment added and linked to answer successfully');
+        
+    
+      } catch(error) {
+        console.error('Error adding comment:', error); 
+        res.status(500).json({ error: 'Internal Server Error adding comment' });
+      } 
+    
+});
+router.post('/Comments/Upvote/:commentId', async (req, res) => {
+   
+
+    const {commentId} = req.params;
+    
+    
+
+  
+    try {
+        //increment the votes of the comment by 1
+
+        const updateComment = await commentModel.findByIdAndUpdate(
+            commentId,
+            {$inc : {votes  : 1}},
+            {new : true}
+        );
+        if(!updateComment){
+            return res.status(404).json({ error: 'Comment could not be updated' });
+        }
+
+   
+        res.send('comment votes updated successfully');
+        
+    
+      } catch(error) {
+        console.error('Error updating commeent:', error); 
+        res.status(500).json({ error: 'Internal Server Error updating comment' });
       } 
     
 });

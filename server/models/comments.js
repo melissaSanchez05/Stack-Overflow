@@ -4,17 +4,18 @@ const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
- var AnswerSchema = new Schema({
+ var CommentSchema = new Schema({
 
     text :{
         type: String,
         required : true,
     },
-    ans_by: {
+    comment_by: {
         type: String,
         required : true,
+        default : 'Anonymous',
     },
-    ans_date_time : {
+    comment_date_time : {
         type : Date,
         default : Date.now,
     },
@@ -22,15 +23,10 @@ const Schema = mongoose.Schema;
         type: Number,
         default : 0,
     },
-    comments : [{
-        type : Schema.Types.ObjectId,
-        ref : 'Comments',
-        default : [],
-    }],
  });
 
- AnswerSchema.virtual('url').get(function(){
-    return 'posts/answer/' + this.id;
+ CommentSchema.virtual('url').get(function(){
+    return 'posts/comment/' + this.id;
  });
 
- module.exports = mongoose.model('Answers', AnswerSchema);
+ module.exports = mongoose.model('Comments', CommentSchema);

@@ -5,6 +5,7 @@ import './stylesheets/logIn.css'
 import './stylesheets/profile.css'
 import './stylesheets/register.css'
 import './stylesheets/success.css'
+import './stylesheets/comment.css'
 import Header from './components/header';
 import { LeftSideMenu } from './components/mainPage';
 import { BrowserRouter, Routes, Route, useParams } from 'react-router-dom';
@@ -19,6 +20,7 @@ import ProfileForm from './components/profileDisplay';
 import RegistrationForm from './components/registerUserDisplay';
 import SuccessForm from './components/successDisplay';
 import LogOutForm from './components/logout';
+import CommentsDisplay from './components/postComment';
 
 function HomePage(){
   return(
@@ -125,6 +127,14 @@ function LogOut(){
     </>
   );
 }
+function Comments(){
+  const {answerId} = useParams();
+  return(
+    <>
+    <CommentsDisplay answerId={answerId}/>
+    </>
+  );
+}
 
 function App() {
   return (
@@ -132,6 +142,7 @@ function App() {
 <BrowserRouter>
     <Routes>
         <Route path = '/' element={<LogIn/>}  />
+        <Route path = '/AddComment/:answerId' element={<Comments/>}  />
         <Route path = '/LogOut' element={<LogOut/>}  />
         <Route path = '/Home' element={<HomePage/>}  />
         <Route path = '/Profile' element={<Profile/>}  />

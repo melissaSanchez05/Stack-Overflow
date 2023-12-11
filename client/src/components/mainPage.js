@@ -1,10 +1,10 @@
 import React ,{useState}from "react";
 import { useNavigate } from 'react-router-dom';
+import { NextPrevButton } from "./nextPrevButton";
 
 
 
-
-
+const userType = sessionStorage.getItem('userType')
    export function LeftSideMenu({activeTab, component}){
     const navigate = useNavigate();
     const [activeButton, setActiveButton] = useState(activeTab);
@@ -15,7 +15,9 @@ import { useNavigate } from 'react-router-dom';
        if (label === 'Tags') {
        
         navigate('/Tags')
-    } else{
+    } else if(label === 'Profile'){
+        navigate('/Profile')
+    }else{
         navigate('/Questions/Newest')
         
     }
@@ -24,20 +26,30 @@ import { useNavigate } from 'react-router-dom';
     const getMenuItemClassName = (tab) => {
       return `left-menu-text selectable ${tab === activeButton ? 'selected-menu' : ''}`;
   };
+  const onPrev = () =>{
+}
 
+const onNext = () =>{
+
+  }
  
 
 
     return (
+        <>
         <div className="left-menu">
         <div className="left-menu-header">PUBLIC</div>
         <div className= {getMenuItemClassName('Questions')}  onClick= {()=> handleButton('Questions')}>Question</div>
         <div className= {getMenuItemClassName('Tags')}  onClick= {()=> handleButton('Tags')}>Tags</div>
+        {userType === 'guest' ? '' : <div className= {getMenuItemClassName('Profile')}  onClick= {()=> handleButton('Profile')}>Profile</div>}
         <div className="right-content">
         {component}
-       
+    
         </div>
+        
         </div>
+
+        </>
       );
 }
 

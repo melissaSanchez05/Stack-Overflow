@@ -1,11 +1,11 @@
 import SearchBar from "./searchBar";
 import React from "react";
-import Button from "./button";
 
 const userType = sessionStorage.getItem('userType');
 
 export default function Header() {
 
+    
   return (
     <>
     <div className="header">
@@ -15,11 +15,10 @@ export default function Header() {
       <span className="header-text">overflow</span>
       
       <SearchBar />
-      {userType === 'guest' ? '':  <Button label ="Profile" className= "ask-question " to={'/Profile'} /> }
-      
+     
       
     </div>
-    
+
     </>
   );
 }

@@ -9,6 +9,7 @@ const Schema = mongoose.Schema;
     username :{
         type: String,
         required : true,
+        default : 'Anonymous',
     },
     password : {
         type : String,

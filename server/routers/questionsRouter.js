@@ -5,7 +5,7 @@ const answerModel = require('../models/answers')
 const questionModel = require('../models/questions')
 const tagsModel = require('../models/tags')
 const userModel = require('../models/users')
-
+const commentModel = require('../models/comments')
 router.get('/:tab', async (req,res, next)=> {
    const {tab} = req.params;
 
