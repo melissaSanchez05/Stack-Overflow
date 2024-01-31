@@ -3,7 +3,7 @@ Add design docs in *images/*
 
 
 
-Fake Stack Overflow
+MindBox Website
 
 ## Description
 
