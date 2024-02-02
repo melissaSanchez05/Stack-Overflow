@@ -11,13 +11,16 @@ This is an interactive webpage that provides a platform for user to ask question
 The porpuse of the webpage is to build a community within the Computer science world. Where users of all different knowledge levels can advice,
 peer review, suggest, share codding ideas, solutions, implementations and common mistakes. Each user have the option to create an account or to browse as a guest. Restrictions and interactions is restricted based on the method of login. For compleate web access, an account must be created.
 
+-update
+This is a interactive webpage dedicated to fostering a vibrant community focus on computer science and related fields. This platform serves a hub where users can pose questions, share insights, and engage in discussions on a broad spectrum topics. The primary objective of this webpage is to cultivate a supportive and collaborate community that transcends diverse knowledge levels, fostering an  where users can provide advice, participate in peer review, suggest ideas, showcase implementations and ideas and discuss common pitfails.(coun't)
+
+
 ## Table of Contents
 
 - [Installation](#installation)
 - [Usage](#usage)
 - [Features](#features)
 
-- 
 
 ## Installation
 To run this web application on a local machine you must:
