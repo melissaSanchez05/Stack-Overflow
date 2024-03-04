@@ -1,7 +1,7 @@
 
 
 
-MindBox Website
+Stack overflow
 
 ## Description
 
@@ -18,6 +18,7 @@ This is a interactive webpage dedicated to fostering a vibrant community focus o
 - [Installation](#installation)
 - [Usage](#usage)
 - [Features](#features)
+- [Images](#images)
 
 
 ## Installation
@@ -87,3 +88,6 @@ Fake Stack Overflow aims to provide a user-friendly and seamless experience for 
 ## collaboration
 
 This projected was designed and programmed by Melissa Sanchez Pena.
+## Images
+![alt text](<img width="991" alt="Screenshot 2024-03-04 at 07 43 42" src="https://github.com/sbu-ckane-f23-cse316-projectorg/projectfakeso-texas_wranglers/assets/123083767/67dc83ef-29eb-4a08-9910-a54138bfb6cf">
+)
