@@ -85,7 +85,7 @@ Fake Stack Overflow aims to provide a user-friendly and seamless experience for 
 
 7. Responsive Design: The website boasts a responsive design, ensuring a consistent and enjoyable user experience across different devices, catering to both seasoned developers and newcomers seeking guidance.
 
-## collaboration
+
 ## Images
 1. Log In
 <img width="1710" alt="Screenshot 2024-03-04 at 09 55 17" src="https://github.com/sbu-ckane-f23-cse316-projectorg/projectfakeso-texas_wranglers/assets/123083767/4f2a4a17-dc4c-46a9-bfe7-a133954b2cfa">
@@ -115,7 +115,7 @@ Fake Stack Overflow aims to provide a user-friendly and seamless experience for 
 13. Downvote a comment
 <img width="1710" alt="Screenshot 2024-03-04 at 10 03 44" src="https://github.com/sbu-ckane-f23-cse316-projectorg/projectfakeso-texas_wranglers/assets/123083767/94a788cf-e614-4966-8143-fc570a069878">
 
-
+## collaboration
 This projected was designed and programmed by Melissa Sanchez Pena.
 
 
