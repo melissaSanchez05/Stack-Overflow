@@ -86,6 +86,35 @@ Fake Stack Overflow aims to provide a user-friendly and seamless experience for 
 7. Responsive Design: The website boasts a responsive design, ensuring a consistent and enjoyable user experience across different devices, catering to both seasoned developers and newcomers seeking guidance.
 
 ## collaboration
+## Images
+1. Log In
+<img width="1710" alt="Screenshot 2024-03-04 at 09 55 17" src="https://github.com/sbu-ckane-f23-cse316-projectorg/projectfakeso-texas_wranglers/assets/123083767/4f2a4a17-dc4c-46a9-bfe7-a133954b2cfa">
+2. User registration
+<img width="1710" alt="Screenshot 2024-03-04 at 09 56 08" src="https://github.com/sbu-ckane-f23-cse316-projectorg/projectfakeso-texas_wranglers/assets/123083767/cf0a6909-5792-4dd6-be0f-e958ff2911b1">
+3. Question Tab
+<img width="1710" alt="Screenshot 2024-03-04 at 09 51 54" src="https://github.com/sbu-ckane-f23-cse316-projectorg/projectfakeso-texas_wranglers/assets/123083767/950c4444-2667-454a-bb60-fb9b9ee4e87c">
+4. Tags Tab
+<img width="1710" alt="Screenshot 2024-03-04 at 09 52 04" src="https://github.com/sbu-ckane-f23-cse316-projectorg/projectfakeso-texas_wranglers/assets/123083767/fdafa40c-35b9-4175-8703-7614421ab14a">
+5. Link to question commens
+<img width="1710" alt="Screenshot 2024-03-04 at 09 52 25" src="https://github.com/sbu-ckane-f23-cse316-projectorg/projectfakeso-texas_wranglers/assets/123083767/c6872f8c-5793-4326-b37a-ec32b6cd1daa">
+
+6. User profile
+<img width="1710" alt="Screenshot 2024-03-04 at 09 51 41" src="https://github.com/sbu-ckane-f23-cse316-projectorg/projectfakeso-texas_wranglers/assets/123083767/1db04224-e8ab-4e86-b5d8-925c13129e87">
+7. Post a question
+<img width="1710" alt="Screenshot 2024-03-04 at 09 52 10" src="https://github.com/sbu-ckane-f23-cse316-projectorg/projectfakeso-texas_wranglers/assets/123083767/25154742-d8d0-4ddf-81b3-89e3b84322d5">
+8. Respond to a question
+<img width="1710" alt="Screenshot 2024-03-04 at 09 52 33" src="https://github.com/sbu-ckane-f23-cse316-projectorg/projectfakeso-texas_wranglers/assets/123083767/7cb63aa6-de30-46ec-b2b1-eaee488a5995">
+9. Upvote a question
+<img width="1710" alt="Screenshot 2024-03-04 at 10 03 08" src="https://github.com/sbu-ckane-f23-cse316-projectorg/projectfakeso-texas_wranglers/assets/123083767/8e0d9a0c-c42d-4d62-b0fc-fb39ec63fa2e">
+10. Downvote a question
+<img width="1710" alt="Screenshot 2024-03-04 at 10 03 14" src="https://github.com/sbu-ckane-f23-cse316-projectorg/projectfakeso-texas_wranglers/assets/123083767/d9666c5d-cab4-4003-95e6-da3ac59bce5c">
+11. Comment a question
+<img width="1710" alt="Screenshot 2024-03-04 at 10 03 23" src="https://github.com/sbu-ckane-f23-cse316-projectorg/projectfakeso-texas_wranglers/assets/123083767/0ceeec19-4f5e-447b-afe1-8bbfaa4d662b">
+12. Upvote a comment
+<img width="1710" alt="Screenshot 2024-03-04 at 10 03 31" src="https://github.com/sbu-ckane-f23-cse316-projectorg/projectfakeso-texas_wranglers/assets/123083767/770a0b23-c918-4f7b-b5a6-5ccc2ae3416b">
+13. Downvote a comment
+<img width="1710" alt="Screenshot 2024-03-04 at 10 03 44" src="https://github.com/sbu-ckane-f23-cse316-projectorg/projectfakeso-texas_wranglers/assets/123083767/94a788cf-e614-4966-8143-fc570a069878">
+
 
 This projected was designed and programmed by Melissa Sanchez Pena.
 
